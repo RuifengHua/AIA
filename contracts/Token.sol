@@ -28,6 +28,7 @@ contract Token is ERC721, Ownable, IERC721Receiver{
     ERC721 public nonFungibleContract = ERC721(address(this));
     uint256 nextId = 0;
     // Map from token ID to their corresponding auction.
+    mapping (address => uint256) userToNumonAuction;
     mapping (uint256 => Auction) tokenIdToAuction;
     mapping ( uint256 => AIA) private _tokenDetails;
 
@@ -66,6 +67,7 @@ contract Token is ERC721, Ownable, IERC721Receiver{
             uint64(block.timestamp)
         );
         _addAuction(_tokenId, auction);
+        userToNumonAuction[msg.sender] ++;
     }
 
 
@@ -157,6 +159,28 @@ contract Token is ERC721, Ownable, IERC721Receiver{
             for(i=0; i < totalAIAs; i++)
             {
                 if(ownerOf(i) == user)
+                {
+                    result[resultIndex] = i;
+                    resultIndex++;
+                }
+            }
+            return result;
+        }
+    }
+
+        function getTokensonAuctionForUser(address user) public view returns (uint256[] memory){
+        if(userToNumonAuction[user] ==0){
+            return new uint256[](0);
+        }
+        else{
+            uint256[] memory result = new uint256[](userToNumonAuction[user]);
+            uint256 totalAIAs = nextId;
+            uint256 resultIndex = 0;
+            uint256 i;
+            for(i=0; i < totalAIAs; i++)
+            {
+                Auction memory auction = tokenIdToAuction[i];
+                if(auction.seller == user)
                 {
                     result[resultIndex] = i;
                     resultIndex++;
