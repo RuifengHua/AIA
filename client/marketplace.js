@@ -1,6 +1,6 @@
 Moralis.initialize("taWsDU6fLPsqbQZLBwjB9xVNmrekwEaBB1qdVxws"); // Application id from moralis.io
 Moralis.serverURL = "https://rfyl3h4u7zc0.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x0C5C2454516e0fcA877d850763f6AC04667432d0";
+const CONTRACT_ADDRESS = "0x94966154C8764810B5202D5EAAb1c3e5FFACDBed";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -62,9 +62,10 @@ function renderAIA(id, data) {
 		let web3 = new window.Web3(Moralis.provider);
 		let abi = await getAbi();
 		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+		const amount = web3.utils.toWei("1.2", "ether");
 		contract.methods
 			.bid(id)
-			.send({ from: ethereum.selectedAddress, value: 1200000000000000000 })
+			.send({ from: ethereum.selectedAddress, value: amount })
 			.on("receipt", () => {
 				console.log("bought");
 			});
