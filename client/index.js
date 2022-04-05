@@ -1,6 +1,6 @@
 Moralis.initialize("taWsDU6fLPsqbQZLBwjB9xVNmrekwEaBB1qdVxws"); // Application id from moralis.io
 Moralis.serverURL = "https://rfyl3h4u7zc0.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x94966154C8764810B5202D5EAAb1c3e5FFACDBed";
+const CONTRACT_ADDRESS = "0x1Ed2545d03dC097bD1B0259F1953e80c4fa35dF5";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -42,7 +42,7 @@ async function logOut() {
 }
 
 function start() {
-	location.href = "myCollections.html";
+	location.href = "generate.html";
 }
 
 function getAbi() {
