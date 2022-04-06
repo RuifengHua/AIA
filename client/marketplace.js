@@ -1,6 +1,6 @@
-Moralis.initialize("taWsDU6fLPsqbQZLBwjB9xVNmrekwEaBB1qdVxws"); // Application id from moralis.io
-Moralis.serverURL = "https://rfyl3h4u7zc0.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x1Ed2545d03dC097bD1B0259F1953e80c4fa35dF5";
+Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
+Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
+const CONTRACT_ADDRESS = "0x4f13d75C86722Ef4483a7ab650eC0c5eE6806811";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -68,6 +68,7 @@ function renderAIA(id, data) {
 			.send({ from: ethereum.selectedAddress, value: amount })
 			.on("receipt", () => {
 				console.log("bought");
+				renderGame();
 			});
 	});
 }

@@ -6,6 +6,11 @@ import "../node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
 
+
+    event Mint(address indexed owner, uint256 indexed tokenId, uint256 timestamp);
+    event ListAnItem(address indexed owner, uint256 indexed tokenId, uint256 price, uint256 duration, uint256 timestamp);
+    event CancelAnListedItem(address indexed owner, uint256 indexed tokenId, uint256 timestamp);
+    event PurchaseAnItem(address indexed buyer, uint256 indexed tokenId, address indexed seller, uint256 price, uint256 timestamp);
     /////////////////////////////////////////////Token Contract///////////////////////////////////////////////////
 
     struct AIA {
@@ -15,7 +20,7 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
         uint256 attribute4;
     }
 
-    uint256 nextId = 0;
+    uint256 private nextId = 0;
     
     mapping (uint256 => AIA) private _tokenDetails;
 
@@ -27,6 +32,7 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
         require(msg.value >= 1 ether, "Not enough ETH sent; check price!");
         _tokenDetails[nextId] = AIA(attribute1, attribute2, attribute3, attribute4);
         _safeMint(msg.sender, nextId);
+        emit Mint(msg.sender, nextId, block.timestamp);
         nextId++;
     }
 
@@ -34,11 +40,11 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
         return _tokenDetails[tokenId];
     }
 
-    function getBalance() public view returns (uint256){
+    function getBalance() public view onlyOwner returns (uint256){
         return address(this).balance;
     }
 
-    function withdrawBalance() external payable{
+    function withdrawBalance() external payable onlyOwner {
         require(msg.sender == owner(), "");
         (bool sent, bytes memory data) = payable(address(owner())).call{value:address(this).balance}("");
 
@@ -93,6 +99,7 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
         );
         safeTransferFrom(msg.sender, address(this), _tokenId);
         userToListedItems[msg.sender] ++;
+        emit ListAnItem(msg.sender, _tokenId, _price, _duration, block.timestamp);
     }
 
     function cancelItemToSell(uint256 _tokenId) external nonReentrant {
@@ -104,6 +111,7 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
         item.isSelling = false;
         this.safeTransferFrom(address(this), item.seller, _tokenId);
         delete tokenIdToItem[_tokenId];
+        emit CancelAnListedItem(msg.sender, _tokenId, block.timestamp);
     }
 
     function purchaseItem(uint256 _tokenId) external payable nonReentrant {
@@ -121,6 +129,7 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
         }
         this.safeTransferFrom(address(this), msg.sender, _tokenId);
         userToListedItems[seller]--;
+        emit PurchaseAnItem(msg.sender, _tokenId, seller, price, block.timestamp);
     }
 
     function getListedItemsForUser(address user) public view returns (uint256[] memory){

@@ -18,7 +18,6 @@ async function logOut() {
 }
 
 document.getElementById("btn-logout").onclick = logOut;
-document.getElementById("btn-mint").onclick = mint;
 
 function getAbi() {
 	return new Promise((res) => {
@@ -26,20 +25,6 @@ function getAbi() {
 			res(json.abi);
 		});
 	});
-}
-
-async function mint() {
-	await Moralis.enableWeb3();
-	let web3 = new window.Web3(Moralis.provider);
-	let abi = await getAbi();
-	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-	const receipt = await contract.methods
-		.mint(2, 2, 2, 2)
-		.send({ from: ethereum.selectedAddress, value: 1000000000000000000 })
-		.on("receipt", () => {
-			console.log("done");
-		});
-	console.log(receipt.events);
 }
 
 init();
