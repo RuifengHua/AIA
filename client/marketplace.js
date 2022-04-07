@@ -1,6 +1,6 @@
 Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
 Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x4f13d75C86722Ef4483a7ab650eC0c5eE6806811";
+const CONTRACT_ADDRESS = "0x72EEd35848B96b048954c15499197397954437BB";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -50,19 +50,19 @@ function renderAIA(id, data) {
 			<div>Attribute3: <span class="AIA_attribute3">${data.attribute3}</span></div>
 			<div>Attribute4: <span class="AIA_attribute4">${data.attribute4}</span></div>
 			<div>
-				<button id="btn_sell_${id}" class="btn btn-primary btn-block">Buy</button>
+				<button id="btn_purchase_${id}" class="btn btn-primary btn-block">Buy</button>
 			</div>
         </div>
     </div>`;
 	let element = $.parseHTML(htmlString);
 	$("#AIA_row").append(element);
 
-	$(`#btn_sell_${id}`).click(async () => {
+	$(`#btn_purchase_${id}`).click(async () => {
 		await Moralis.enableWeb3();
 		let web3 = new window.Web3(Moralis.provider);
 		let abi = await getAbi();
 		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-		const amount = web3.utils.toWei("1.2", "ether");
+		const amount = web3.utils.toWei("0.012", "ether");
 		contract.methods
 			.purchaseItem(id)
 			.send({ from: ethereum.selectedAddress, value: amount })

@@ -1,6 +1,6 @@
 Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
 Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x4f13d75C86722Ef4483a7ab650eC0c5eE6806811";
+const CONTRACT_ADDRESS = "0x72EEd35848B96b048954c15499197397954437BB";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -33,9 +33,10 @@ async function mint() {
 	let web3 = new window.Web3(Moralis.provider);
 	let abi = await getAbi();
 	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+	const amount = web3.utils.toWei("0.01", "ether");
 	const receipt = await contract.methods
 		.mint(2, 2, 2, 2)
-		.send({ from: ethereum.selectedAddress, value: 1000000000000000000 })
+		.send({ from: ethereum.selectedAddress, value: amount })
 		.on("receipt", () => {
 			console.log("done");
 		});

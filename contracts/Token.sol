@@ -3,6 +3,7 @@ pragma solidity 0.8.13;
 import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 import "../node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
 
@@ -29,7 +30,7 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
     }
 
     function mint(uint256 attribute1, uint256 attribute2, uint256 attribute3, uint256 attribute4) external payable {
-        require(msg.value >= 1 ether, "Not enough ETH sent; check price!");
+        require(msg.value >= 0.01 ether, "Not enough ETH sent; check price!");
         _tokenDetails[nextId] = AIA(attribute1, attribute2, attribute3, attribute4);
         _safeMint(msg.sender, nextId);
         emit Mint(msg.sender, nextId, block.timestamp);
@@ -87,7 +88,7 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
     mapping (address => uint256) userToListedItems;
     mapping (uint256 => Item) tokenIdToItem;
 
-    function createItemToSell(uint256 _tokenId, uint256 _price, uint256 _duration) external nonReentrant {
+    function sell(uint256 _tokenId, uint256 _price, uint256 _duration) external nonReentrant {
         require(ownerOf(_tokenId) == msg.sender);
         require(_duration >= 1 minutes);
         tokenIdToItem[_tokenId] = Item(
@@ -102,7 +103,7 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
         emit ListAnItem(msg.sender, _tokenId, _price, _duration, block.timestamp);
     }
 
-    function cancelItemToSell(uint256 _tokenId) external nonReentrant {
+    function cancelSell(uint256 _tokenId) external nonReentrant {
         Item storage item = tokenIdToItem[_tokenId];
         require(item.startedAt > 0);
         require(item.isSelling);
