@@ -4,8 +4,82 @@ import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 import "../node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
+import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
+contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2 {
+
+
+    /////////////////////////////////Random number//////////////////////////////
+    VRFCoordinatorV2Interface COORDINATOR;
+
+    // Your subscription ID.
+    uint64 s_subscriptionId;
+
+    // Rinkeby coordinator. For other networks,
+    // see https://docs.chain.link/docs/vrf-contracts/#configurations
+    address vrfCoordinator = 0x6168499c0cFfCaCD319c818142124B7A15E857ab;
+
+    // The gas lane to use, which specifies the maximum gas price to bump to.
+    // For a list of available gas lanes on each network,
+    // see https://docs.chain.link/docs/vrf-contracts/#configurations
+    bytes32 keyHash = 0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc;
+
+    // Depends on the number of requested values that you want sent to the
+    // fulfillRandomWords() function. Storing each word costs about 20,000 gas,
+    // so 100,000 is a safe default for this example contract. Test and adjust
+    // this limit based on the network that you select, the size of the request,
+    // and the processing of the callback request in the fulfillRandomWords()
+    // function.
+    uint32 callbackGasLimit = 100000;
+
+    // The default is 3, but you can set this higher.
+    uint16 requestConfirmations = 3;
+
+    // For this example, retrieve 2 random values in one request.
+    // Cannot exceed VRFCoordinatorV2.MAX_NUM_WORDS.
+    uint32 numWords =  1;
+
+    uint256 private baseSeed;
+    uint256 public s_requestId;
+    address s_owner;
+
+    // Assumes the subscription is funded sufficiently.
+    function requestRandomWords() external onlyOwner {
+        // Will revert if subscription is not set and funded.
+        s_requestId = COORDINATOR.requestRandomWords(keyHash,s_subscriptionId,requestConfirmations,callbackGasLimit,numWords);
+    }
+    
+    function fulfillRandomWords(uint256, uint256[] memory randomWords) internal override {
+        baseSeed = randomWords[0];
+    }
+
+    constructor (string memory name, string memory symbol, uint64 subscriptionId) ERC721(name, symbol) VRFConsumerBaseV2(vrfCoordinator) {
+        COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
+        s_owner = msg.sender;
+        s_subscriptionId = subscriptionId;
+    }
+
+    uint256 increment = 0;
+    uint32[100] private order;
+
+    function shuffle() external{
+        uint32[100] memory unshuffled;
+        uint8 i;
+        for (i=0; i < 100; i++) {
+            unshuffled[i] = i;
+        }
+        uint idx;
+        for (i=0; i < 100; i++) {
+            idx = uint256(keccak256(abi.encode(baseSeed, increment))) % (100 - i);
+            increment++;
+            order[i] = unshuffled[idx];
+            unshuffled[idx] = unshuffled[100 - i - 1];
+        }
+    }
+
+
+    /////////////////////////////////Random number//////////////////////////////
 
 
     event Mint(address indexed owner, uint256 indexed tokenId, uint256 timestamp);
@@ -25,13 +99,11 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard{
     
     mapping (uint256 => AIA) private _tokenDetails;
 
-    constructor (string memory name, string memory symbol) ERC721(name, symbol){
 
-    }
 
     function mint(uint256 attribute1, uint256 attribute2, uint256 attribute3, uint256 attribute4) external payable {
         require(msg.value >= 0.01 ether, "Not enough ETH sent; check price!");
-        _tokenDetails[nextId] = AIA(attribute1, attribute2, attribute3, attribute4);
+        _tokenDetails[nextId] = AIA(order[nextId], attribute2, attribute3, attribute4);
         _safeMint(msg.sender, nextId);
         emit Mint(msg.sender, nextId, block.timestamp);
         nextId++;
