@@ -7,7 +7,7 @@ import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721UR
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2 {
+contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, ERC721URIStorage {
 
 
     /////////////////////////////////Random number//////////////////////////////
@@ -99,12 +99,14 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumer
     
     mapping (uint256 => AIA) private _tokenDetails;
 
-
+    string prefix = "ipfs://QmdJNXwJckh8jAYJSLJzASFd8vCUSH9dhREjY1ZqZxAWav/";
+    string sub = ".json";
 
     function mint(uint256 attribute1, uint256 attribute2, uint256 attribute3, uint256 attribute4) external payable {
         require(msg.value >= 0.01 ether, "Not enough ETH sent; check price!");
         _tokenDetails[nextId] = AIA(order[nextId], attribute2, attribute3, attribute4);
         _safeMint(msg.sender, nextId);
+        _setTokenURI(nextId,  string(abi.encodePacked(prefix, uintToString(order[nextId]), sub)));
         emit Mint(msg.sender, nextId, block.timestamp);
         nextId++;
     }
@@ -231,5 +233,22 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumer
     /////////////////////////////////////////////Helper Functions///////////////////////////////////////////////////
     function onERC721Received(address, address, uint256, bytes memory) public virtual override returns (bytes4) {
         return this.onERC721Received.selector;
+    }
+
+    function uintToString(uint v) public pure returns (string memory) {
+        uint maxlength = 100;
+        bytes memory reversed = new bytes(maxlength);
+        uint i = 0;
+        while (v != 0) {
+            uint remainder = v % 10;
+            v = v / 10;
+            reversed[i++] = bytes1(uint8(48 + remainder));
+        }
+        bytes memory s = new bytes(i); // i + 1 is inefficient
+        for (uint j = 0; j < i; j++) {
+            s[j] = reversed[i - j - 1]; // to avoid the off-by-one error
+        }
+        string memory str = string(s);  // memory isn't implicitly convertible to storage
+        return str;
     }
 }
