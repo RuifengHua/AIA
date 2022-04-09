@@ -1,6 +1,7 @@
 Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
 Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0xAAf4CeA14EB5e40896bf01A72736a22C434A9AD3";
+const CONTRACT_ADDRESS = "0x99103926148E153F45C141c34D2410a74a393fA0";
+
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -30,16 +31,20 @@ async function renderGame() {
 	let userAIAs = await contract.methods.getAllTokensForUser(ethereum.selectedAddress).call({ from: ethereum.selectedAddress });
 	if (userAIAs.length != 0) {
 		userAIAs.forEach(async (AIAId) => {
-			let details = await contract.methods.getTokenDetails(AIAId).call({ from: ethereum.selectedAddress });
-			renderAIA(AIAId, details, false);
+			let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
+			$.getJSON(json, function (data) {
+				renderAIA(AIAId, data, false);
+			});
 		});
 	}
 
 	let useronAuctionAIAs = await contract.methods.getListedItemsForUser(ethereum.selectedAddress).call({ from: ethereum.selectedAddress });
 	if (useronAuctionAIAs.length != 0) {
 		useronAuctionAIAs.forEach(async (AIAId) => {
-			let details = await contract.methods.getTokenDetails(AIAId).call({ from: ethereum.selectedAddress });
-			renderAIA(AIAId, details, true);
+			let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
+			$.getJSON(json, function (data) {
+				renderAIA(AIAId, data, true);
+			});
 		});
 	}
 
@@ -51,28 +56,21 @@ function renderAIA(id, data, onAuction) {
 	if (!onAuction) {
 		htmlString = `
 		<div class="col-md-3 mx-1 card id="pet_${id}">						
-			<img class="card-img-top pet_img" src="pet.png" />
+			<img class="card-img-top pet_img" src="${data.image}" />
 			<div class="card-body">
 				<div>Id: <span class="pet_id">${id}</span></div>
-				<div>Attribute1: <span class="AIA_attribute1">${data.attribute1}</span></div>
-				<div>Attribute2: <span class="AIA_attribute2">${data.attribute2}</span></div>
-				<div>Attribute3: <span class="AIA_attribute3">${data.attribute3}</span></div>
-				<div>Attribute4: <span class="AIA_attribute4">${data.attribute4}</span></div>
 				<div>
 					<button id="btn_sell_${id}" class="btn btn-primary btn-block">Sell</button>
+					<button id="btn_view_${id}" class="btn btn-primary btn-block">View</button>
 				</div>
 			</div>
 		</div>`;
 	} else {
 		htmlString = `
 		<div class="col-md-3 mx-1 card id="pet_${id}">						
-			<img class="card-img-top pet_img" src="pet.png" />
+			<img class="card-img-top pet_img" src="${data.image}" />
 			<div class="card-body">
 				<div>Id: <span class="pet_id">${id}</span></div>
-				<div>Attribute1: <span class="AIA_attribute1">${data.attribute1}</span></div>
-				<div>Attribute2: <span class="AIA_attribute2">${data.attribute2}</span></div>
-				<div>Attribute3: <span class="AIA_attribute3">${data.attribute3}</span></div>
-				<div>Attribute4: <span class="AIA_attribute4">${data.attribute4}</span></div>
 				<div>
 				<button id="btn_cancel_sell_${id}" class="btn btn-primary btn-block">Cancel</button>
 			</div>
@@ -110,6 +108,17 @@ function renderAIA(id, data, onAuction) {
 				console.log("on cancel");
 				renderGame();
 			});
+	});
+
+	$(`#btn_view_${id}`).click(async () => {
+		await Moralis.enableWeb3();
+		let web3 = new window.Web3(Moralis.provider);
+		let abi = await getAbi();
+		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+		let json = await contract.methods.tokenURI(id).call({ from: ethereum.selectedAddress });
+		$.getJSON(json, function (data) {
+			console.log(data.image);
+		});
 	});
 }
 

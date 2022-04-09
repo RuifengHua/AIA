@@ -7,8 +7,8 @@ import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721UR
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, ERC721URIStorage {
-
+contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, ERC721URIStorage {
+    
 
     /////////////////////////////////Random number//////////////////////////////
     VRFCoordinatorV2Interface COORDINATOR;
@@ -43,7 +43,6 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumer
     uint256 private baseSeed;
     uint256 public s_requestId;
     address s_owner;
-
     // Assumes the subscription is funded sufficiently.
     function requestRandomWords() external onlyOwner {
         // Will revert if subscription is not set and funded.
@@ -58,23 +57,24 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumer
         COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
         s_owner = msg.sender;
         s_subscriptionId = subscriptionId;
+        totalSupply = 5;
     }
 
     uint256 increment = 0;
-    uint32[100] private order;
-
+    uint256[100] private order;
+    uint256 totalSupply;
     function shuffle() external{
-        uint32[100] memory unshuffled;
+        uint256[] memory unshuffled = new uint256[](totalSupply);
         uint8 i;
-        for (i=0; i < 100; i++) {
+        for (i=0; i < totalSupply; i++) {
             unshuffled[i] = i;
         }
         uint idx;
-        for (i=0; i < 100; i++) {
-            idx = uint256(keccak256(abi.encode(baseSeed, increment))) % (100 - i);
+        for (i=0; i < totalSupply; i++) {
+            idx = uint256(keccak256(abi.encode(baseSeed, increment))) % (totalSupply - i);
             increment++;
             order[i] = unshuffled[idx];
-            unshuffled[idx] = unshuffled[100 - i - 1];
+            unshuffled[idx] = unshuffled[totalSupply - i - 1];
         }
     }
 
@@ -99,7 +99,7 @@ contract Token is ERC721, Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumer
     
     mapping (uint256 => AIA) private _tokenDetails;
 
-    string prefix = "ipfs://QmdJNXwJckh8jAYJSLJzASFd8vCUSH9dhREjY1ZqZxAWav/";
+    string prefix = "https://aiarts.storage.googleapis.com/metadata/";
     string sub = ".json";
 
     function mint(uint256 attribute1, uint256 attribute2, uint256 attribute3, uint256 attribute4) external payable {

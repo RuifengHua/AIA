@@ -10,8 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "@chainlink/contracts": "^0.4.0",
+    "@google-cloud/storage": "^5.19.0",
     "@openzeppelin/contracts": "^4.5.0",
     "@truffle/hdwallet-provider": "^2.0.4",
+    "cors": "^2.8.5",
     "fs": "^0.0.1-security",
     "truffle-hdwallet-provider": "^1.0.17"
   }
