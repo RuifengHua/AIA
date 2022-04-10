@@ -1,6 +1,6 @@
 Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
 Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x99103926148E153F45C141c34D2410a74a393fA0";
+const CONTRACT_ADDRESS = "0xaed3637c43fA07C5D660aa72038d39aAea4F4B12";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -15,7 +15,6 @@ async function init() {
 
 async function logOut() {
 	await Moralis.User.logOut();
-	location.href = "index.html";
 }
 
 document.getElementById("btn-logout").onclick = logOut;
@@ -32,8 +31,10 @@ async function renderGame() {
 		return;
 	}
 	array.forEach(async (AIAId) => {
-		let details = await contract.methods.getTokenDetails(AIAId).call({ from: ethereum.selectedAddress });
-		renderAIA(AIAId, details);
+		let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
+		$.getJSON(json, function (data) {
+			renderAIA(AIAId, data, true);
+		});
 	});
 
 	$("#game").show();
@@ -41,19 +42,15 @@ async function renderGame() {
 
 function renderAIA(id, data) {
 	let htmlString = `
-    <div class="col-md-3 mx-1 card id="pet_${id}">						
-        <img class="card-img-top pet_img" src="pet.png" />
-        <div class="card-body">
-            <div>Id: <span class="pet_id">${id}</span></div>
-            <div>Attribute1: <span class="AIA_attribute1">${data.attribute1}</span></div>
-            <div>Attribute2: <span class="AIA_attribute2">${data.attribute2}</span></div>
-			<div>Attribute3: <span class="AIA_attribute3">${data.attribute3}</span></div>
-			<div>Attribute4: <span class="AIA_attribute4">${data.attribute4}</span></div>
+	<div class="col-md-3 mx-1 card id="pet_${id}">						
+		<img class="card-img-top pet_img" src="${data.image}" />
+		<div class="card-body">
+			<div>Id: <span class="pet_id">${id}</span></div>
 			<div>
-				<button id="btn_purchase_${id}" class="btn btn-primary btn-block">Buy</button>
+				<button id="btn_purchase_${id}" class="btn btn-primary btn-block">Purchase</button>
 			</div>
-        </div>
-    </div>`;
+		</div>
+	</div>`;
 	let element = $.parseHTML(htmlString);
 	$("#AIA_row").append(element);
 
@@ -66,8 +63,11 @@ function renderAIA(id, data) {
 		contract.methods
 			.purchaseItem(id)
 			.send({ from: ethereum.selectedAddress, value: amount })
+			.on("transactionHash", function (hash) {
+				popupLoading();
+			})
 			.on("receipt", () => {
-				console.log("bought");
+				popupComplete();
 				renderGame();
 			});
 	});
@@ -80,5 +80,24 @@ function getAbi() {
 		});
 	});
 }
+
+function popupLoading() {
+	$("#load").show();
+	$(".success-animation").hide();
+	$(".popup-close").hide();
+	$(".popup-wrap").fadeIn(500);
+	$(".popup-box").removeClass("transform-out").addClass("transform-in");
+}
+
+function popupComplete() {
+	$("#load").hide();
+	$(".success-animation").show();
+	$(".popup-close").show();
+}
+
+$(".popup-close").click(() => {
+	$(".popup-wrap").fadeOut(500);
+	$(".popup-box").removeClass("transform-in").addClass("transform-out");
+});
 
 init();
