@@ -101,7 +101,7 @@ body {
 }
 
 .popup-box {
-	height: 200px;
+	height: 250px;
 	width: 600px;
 	padding: 50px;
 	transform: translate(-50%, -50%) scale(0.5);
@@ -109,7 +109,7 @@ body {
 	top: 50%;
 	left: 50%;
 	box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.5);
-	border-radius: 3px;
+	border-radius: 20px;
 	background: #121212;
 	text-align: center;
 }
@@ -429,4 +429,28 @@ body {
 	left: inherit;
 	bottom: 0;
 	right: 0;
+}
+
+#wrap {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	overflow: hidden;
+}
+#wrap canvas {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 100px;
+	height: 100px;
+	margin: -250px 0 0 -250px;
+	-outline: 1px solid #fff;
+}
+
+#reminder {
+	margin-top: 150px;
+	position: relative;
+	color: #ffffff;
 }
