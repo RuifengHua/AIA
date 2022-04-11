@@ -21,7 +21,7 @@ async function logOut() {
 document.getElementById("btn-logout").onclick = logOut;
 
 async function renderGame() {
-	$("#AIA_row").html("");
+	$(".container ul").html("");
 	//render properties from SC
 	await Moralis.enableWeb3();
 	let web3 = new window.Web3(Moralis.provider);
@@ -54,31 +54,38 @@ function renderAIA(id, data, onAuction) {
 	let htmlString = ``;
 	if (!onAuction) {
 		htmlString = `
-		<div class="col-md-3 mx-1 card id="pet_${id}">						
-			<img class="card-img-top pet_img" src="${data.image}" />
-			<div class="card-body">
-				<div>Id: <span class="pet_id">${id}</span></div>
+		<li class="card" id="card_AIA_${id}">
+			<a class="card-image" href="#" target="_blank">
+				<img src="${data.image}"/>
+			</a>
+			<div class="card-bottom">
+				<p class="description">id:${id}</p>
+				<p class="description">rarity:${data.attributes[0]["value"]}</p>
+				<p class="description">collection:${data.attributes[1]["value"]}</p>
 				<div>
 					<button id="btn_sell_${id}" class="btn btn-primary btn-block">Sell</button>
-					<button id="btn_view_${id}" class="btn btn-primary btn-block">View</button>
 				</div>
-			</div>
-		</div>`;
+			<div>
+		</li>`;
 	} else {
 		htmlString = `
-		<div class="col-md-3 mx-1 card id="pet_${id}">						
-			<img class="card-img-top pet_img" src="${data.image}" />
-			<div class="card-body">
-				<div>Id: <span class="pet_id">${id}</span></div>
+		<li class="card" id="card_AIA_${id}">
+			<a class="card-image" href="#" target="_blank">
+				<img src="${data.image}"/>
+			</a>
+			<div class="card-bottom">
+				<p class="description">id:${id}</p>
+				<p class="description">rarity:${data.attributes[0]["value"]}</p>
+				<p class="description">collection:${data.attributes[1]["value"]}</p>
 				<div>
-				<button id="btn_cancel_sell_${id}" class="btn btn-primary btn-block">Cancel</button>
+					<button id="btn_cancel_sell_${id}" class="btn btn-primary btn-block">Cancel</button>
+				</div>
 			</div>
-			</div>
-		</div>`;
+		</li>`;
 	}
 	let element = $.parseHTML(htmlString);
 
-	$("#AIA_row").append(element);
+	$(".container ul").append(element);
 
 	$(`#btn_sell_${id}`).click(async () => {
 		await Moralis.enableWeb3();
@@ -113,17 +120,6 @@ function renderAIA(id, data, onAuction) {
 				popupComplete();
 				renderGame();
 			});
-	});
-
-	$(`#btn_view_${id}`).click(async () => {
-		await Moralis.enableWeb3();
-		let web3 = new window.Web3(Moralis.provider);
-		let abi = await getAbi();
-		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-		let json = await contract.methods.tokenURI(id).call({ from: ethereum.selectedAddress });
-		$.getJSON(json, function (data) {
-			console.log(data.image);
-		});
 	});
 }
 

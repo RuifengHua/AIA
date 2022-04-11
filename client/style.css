@@ -30,10 +30,6 @@ body {
 #pet_img {
 	width: 100%;
 }
-#game {
-	display: none;
-	padding: 20px 0;
-}
 .promo {
 	text-align: center;
 	padding-top: 150px;
@@ -462,4 +458,91 @@ body {
 #tsparticles {
 	position: fixed;
 	z-index: -999999;
+}
+
+.card-image > img {
+	display: block;
+	width: 100%;
+}
+
+.card-list {
+	width: 100%;
+	display: block;
+	padding: 0;
+	font-size: 0;
+	text-align: center;
+	list-style: none;
+}
+
+.card {
+	background-color: #121212;
+	display: inline-block;
+	border-radius: 20px;
+	width: 90%;
+	max-width: 20rem;
+	margin: 1rem;
+	font-size: 1rem;
+	text-decoration: none;
+	overflow: hidden;
+	box-shadow: 0 0 3rem -1rem rgba(0, 0, 0, 0.5);
+	transition: transform 0.1s ease-in-out, box-shadow 0.1s;
+}
+
+.card:hover {
+	transform: translateY(-0.5rem) scale(1.0125);
+	box-shadow: 0 0.5em 3rem -1rem rgba(0, 0, 0, 0.5);
+}
+
+.card-bottom {
+	background-color: #0b6b11;
+}
+
+.description {
+	font-size: 12px;
+	margin-left: 5px;
+	margin-bottom: 0px;
+	color: #ffffff;
+	text-align: left;
+}
+
+.link {
+	display: inline-block;
+	font-size: 13px;
+	font-weight: 400;
+	text-transform: uppercase;
+	text-decoration: none;
+	line-height: 1.2;
+	overflow: hidden;
+	margin-left: 25px;
+	margin-right: 25px;
+}
+
+.char {
+	display: inline-block;
+	width: 7px;
+	position: relative;
+	color: transparent;
+}
+
+.char::before,
+.char::after {
+	content: attr(data-char);
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: #ffffff;
+	transition: all 0.7s cubic-bezier(0.858, 0.01, 0.068, 0.99);
+	transition-delay: calc(0.03s * var(--char-index));
+}
+
+.char::after {
+	transform: translateY(-100%);
+}
+
+.link:hover .char::before {
+	transform: translateY(100%);
+}
+
+.link:hover .char::after {
+	transform: translateY(0);
 }
