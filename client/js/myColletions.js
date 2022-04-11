@@ -30,12 +30,9 @@ async function renderGame() {
 	let userAIAs = await contract.methods.getAllTokensForUser(ethereum.selectedAddress).call({ from: ethereum.selectedAddress });
 	if (userAIAs.length != 0) {
 		userAIAs.forEach(async (AIAId) => {
-			console.log(AIAId);
-
 			let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
 			$.getJSON(json, function (data) {
 				renderAIA(AIAId, data, false);
-				console.log(data);
 			});
 		});
 	}
