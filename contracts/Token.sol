@@ -78,6 +78,16 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
         }
     }
 
+    function getOrder() external view returns (uint256[] memory){
+        uint256[] memory result = new uint256[](totalSupply);
+        uint256 i;
+        for(i=0; i < totalSupply; i++)
+        {
+            result[i] = order[i];
+        }
+        return result;
+    }
+
 
     /////////////////////////////////Random number//////////////////////////////
 
@@ -236,6 +246,10 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
     }
 
     function uintToString(uint v) public pure returns (string memory) {
+        if (v == 0){
+            string memory zero = "0";
+            return zero;
+        }
         uint maxlength = 100;
         bytes memory reversed = new bytes(maxlength);
         uint i = 0;

@@ -1,6 +1,6 @@
 Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
 Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0xaed3637c43fA07C5D660aa72038d39aAea4F4B12";
+const CONTRACT_ADDRESS = "0xf9bb414685A21c79Bc5133d0c40b327BC604988D";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -42,7 +42,7 @@ async function logOut() {
 }
 
 function userStart() {
-	location.href = "generate.html";
+	location.href = "html/generate.html";
 }
 
 function getAbi() {
@@ -106,6 +106,16 @@ async function shuffle() {
 		});
 }
 
+async function getShuffle() {
+	await Moralis.enableWeb3();
+	let web3 = new window.Web3(Moralis.provider);
+	let abi = await getAbi();
+	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+
+	let result = await contract.methods.getOrder().call({ from: ethereum.selectedAddress });
+	console.log(result);
+}
+
 document.getElementById("btn-start").onclick = userStart;
 document.getElementById("btn-login").onclick = login;
 document.getElementById("btn-logout").onclick = logOut;
@@ -113,6 +123,7 @@ document.getElementById("btn-getBalance").onclick = getBalance;
 document.getElementById("btn-withdrawBalance").onclick = withdrawBalance;
 document.getElementById("btn-requestRandom").onclick = requestRandom;
 document.getElementById("btn-shuffle").onclick = shuffle;
+document.getElementById("btn-getShuffle").onclick = getShuffle;
 
 function popupLoading() {
 	$("#wrap").show();
