@@ -63,7 +63,14 @@ function renderAIA(id, data, onAuction) {
 				<p class="description">rarity:${data.attributes[0]["value"]}</p>
 				<p class="description">collection:${data.attributes[1]["value"]}</p>
 				<div>
-					<button id="btn_sell_${id}" class="btn btn-primary btn-block">Sell</button>
+					<div class="link-wrapper">
+						<a id="btn_sell_${id}" class="animated-link" href="#">
+							<svg width="210" height="40">
+								<rect class="shape" width="210" height="40"></rect>
+							</svg>
+							<div class="text">Sell</div>
+						</a>
+					</div>
 				</div>
 			<div>
 		</li>`;
@@ -77,9 +84,14 @@ function renderAIA(id, data, onAuction) {
 				<p class="description">id:${id}</p>
 				<p class="description">rarity:${data.attributes[0]["value"]}</p>
 				<p class="description">collection:${data.attributes[1]["value"]}</p>
-				<div>
-					<button id="btn_cancel_sell_${id}" class="btn btn-primary btn-block">Cancel</button>
-				</div>
+				<div class="link-wrapper">
+				<a id="btn_cancel_sell_${id}" class="animated-link" href="#">
+					<svg width="210" height="40">
+						<rect class="shape" width="210" height="40"></rect>
+					</svg>
+					<div class="text">Cancel</div>
+				</a>
+			</div>
 			</div>
 		</li>`;
 	}

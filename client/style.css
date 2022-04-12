@@ -494,7 +494,8 @@ body {
 }
 
 .card-bottom {
-	background-color: #0b6b11;
+	background-color: #121212;
+	overflow: auto;
 }
 
 .description {
@@ -531,7 +532,7 @@ body {
 	top: 0;
 	left: 0;
 	color: #ffffff;
-	transition: all 0.7s cubic-bezier(0.858, 0.01, 0.068, 0.99);
+	transition: all 0.3s cubic-bezier(0.858, 0.01, 0.068, 0.99);
 	transition-delay: calc(0.03s * var(--char-index));
 }
 
@@ -545,4 +546,86 @@ body {
 
 .link:hover .char::after {
 	transform: translateY(0);
+}
+
+.link-wrapper {
+	position: relative;
+	line-height: 35px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 10px;
+}
+
+.link-wrapper .animated-link {
+	display: block;
+	width: 280px;
+	height: 40px;
+	text-align: center;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+.link-wrapper .animated-link .text {
+	color: #ffffff;
+	position: relative;
+	top: -37px;
+	font-size: 14px;
+	font-weight: 400;
+	letter-spacing: 3px;
+}
+
+.link-wrapper .animated-link .shape {
+	fill: transparent;
+	stroke: #ffffff;
+	stroke-width: 5px;
+	stroke-dasharray: 100 310;
+	stroke-dashoffset: -304;
+	transition: all 0.5s ease;
+}
+
+.link-wrapper .animated-link:hover .shape {
+	stroke-width: 2px;
+	stroke-dasharray: 550;
+	stroke-dashoffset: 0;
+}
+
+.svg_index_button {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	text-align: center;
+	transform: translate(-50%, -50%);
+	font-size: 24px;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: #ffffff;
+	letter-spacing: 4px;
+	width: 400px;
+	height: 70px;
+	line-height: 70px;
+}
+.svg_index_button:hover {
+	color: #ffffff;
+}
+.svg_index_button svg,
+.svg_index_button svg rect {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	fill: transparent;
+}
+.svg_index_button svg rect {
+	stroke: #ffffff;
+	stroke-dasharray: 70 400;
+	stroke-dashoffset: 540;
+	stroke-width: 4;
+	transition: 1s;
+}
+.svg_index_button:hover svg rect {
+	stroke: rgb(255, 255, 255);
+	stroke-dasharray: 470 0;
+	stroke-dashoffset: 0;
 }

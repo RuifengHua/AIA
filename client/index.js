@@ -119,12 +119,13 @@ async function getShuffle() {
 document.getElementById("btn-start").onclick = userStart;
 document.getElementById("btn-login").onclick = login;
 document.getElementById("btn-logout").onclick = logOut;
+/*
 document.getElementById("btn-getBalance").onclick = getBalance;
 document.getElementById("btn-withdrawBalance").onclick = withdrawBalance;
 document.getElementById("btn-requestRandom").onclick = requestRandom;
 document.getElementById("btn-shuffle").onclick = shuffle;
 document.getElementById("btn-getShuffle").onclick = getShuffle;
-
+*/
 function popupLoading() {
 	$("#wrap").show();
 	$("#reminder").show();
