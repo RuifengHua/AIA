@@ -82,18 +82,20 @@ function renderAIA(id, data, onAuction) {
 				<img src="${data.image}"/>
 			</a>
 			<div class="card-bottom">
-				<p class="description">id:${id}</p>
-				<p class="description">rarity:${data.attributes[0]["value"]}</p>
-				<p class="description">collection:${data.attributes[1]["value"]}</p>
+			<p class="description">Id:${id}</p>
+			<p class="description">${data.name}</p>
+			<p class="description">${data.attributes[0]["value"]}</p>
+			<div>
 				<div class="link-wrapper">
-				<a id="btn_cancel_sell_${id}" class="animated-link" href="#">
-					<svg width="210" height="40">
-						<rect class="shape" width="210" height="40"></rect>
-					</svg>
-					<div class="text">Cancel</div>
-				</a>
+					<a id="btn_cancel_sell_${id}" class="animated-link" href="#">
+						<svg width="210" height="40">
+							<rect class="shape" width="210" height="40"></rect>
+						</svg>
+						<div class="text">Cancel</div>
+					</a>
+				</div>
 			</div>
-			</div>
+		<div>
 		</li>`;
 	}
 	let element = $.parseHTML(htmlString);
