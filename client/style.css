@@ -32,12 +32,7 @@ body {
 }
 .promo {
 	text-align: center;
-	padding-top: 150px;
-	height: 75vh;
-	background-image: url(promo.png);
-	background-size: contain; /* <------ */
-	background-repeat: no-repeat;
-	background-position: center center;
+	height: 85vh;
 }
 
 .banner {
@@ -628,4 +623,10 @@ body {
 	stroke: rgb(255, 255, 255);
 	stroke-dasharray: 470 0;
 	stroke-dashoffset: 0;
+}
+
+#promo_video {
+	width: 100%;
+	height: 100%;
+	margin: 0;
 }

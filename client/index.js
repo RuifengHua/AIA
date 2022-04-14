@@ -1,6 +1,6 @@
 Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
 Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0xf9bb414685A21c79Bc5133d0c40b327BC604988D";
+const CONTRACT_ADDRESS = "0xa74c18eCedA4d0b0D6c100BCF232F8cC96f4D857";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -47,7 +47,7 @@ function userStart() {
 
 function getAbi() {
 	return new Promise((res) => {
-		$.getJSON("Token.json", (json) => {
+		$.getJSON("../build/contracts/Token.json", (json) => {
 			res(json.abi);
 		});
 	});
@@ -119,13 +119,13 @@ async function getShuffle() {
 document.getElementById("btn-start").onclick = userStart;
 document.getElementById("btn-login").onclick = login;
 document.getElementById("btn-logout").onclick = logOut;
-/*
+
 document.getElementById("btn-getBalance").onclick = getBalance;
 document.getElementById("btn-withdrawBalance").onclick = withdrawBalance;
 document.getElementById("btn-requestRandom").onclick = requestRandom;
 document.getElementById("btn-shuffle").onclick = shuffle;
 document.getElementById("btn-getShuffle").onclick = getShuffle;
-*/
+
 function popupLoading() {
 	$("#wrap").show();
 	$("#reminder").show();

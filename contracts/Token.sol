@@ -53,11 +53,11 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
         baseSeed = randomWords[0];
     }
 
-    constructor (string memory name, string memory symbol, uint64 subscriptionId) ERC721(name, symbol) VRFConsumerBaseV2(vrfCoordinator) {
+    constructor (string memory name, string memory symbol, uint64 subscriptionId, uint64 _totalSupply) ERC721(name, symbol) VRFConsumerBaseV2(vrfCoordinator) {
         COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
         s_owner = msg.sender;
         s_subscriptionId = subscriptionId;
-        totalSupply = 5;
+        totalSupply = _totalSupply;
     }
 
     uint256 increment = 0;
@@ -67,7 +67,7 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
         uint256[] memory unshuffled = new uint256[](totalSupply);
         uint8 i;
         for (i=0; i < totalSupply; i++) {
-            unshuffled[i] = i;
+            unshuffled[i] = i+1;
         }
         uint idx;
         for (i=0; i < totalSupply; i++) {
@@ -98,32 +98,19 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
     event PurchaseAnItem(address indexed buyer, uint256 indexed tokenId, address indexed seller, uint256 price, uint256 timestamp);
     /////////////////////////////////////////////Token Contract///////////////////////////////////////////////////
 
-    struct AIA {
-        uint256 attribute1; 
-        uint256 attribute2;
-        uint256 attribute3;
-        uint256 attribute4;
-    }
-
     uint256 private nextId = 0;
     
-    mapping (uint256 => AIA) private _tokenDetails;
-
     string prefix = "https://aiarts.storage.googleapis.com/metadata/";
     string sub = ".json";
 
-    function mint(uint256 attribute1, uint256 attribute2, uint256 attribute3, uint256 attribute4) external payable {
+    function mint() external payable {
         require(msg.value >= 0.01 ether, "Not enough ETH sent; check price!");
-        _tokenDetails[nextId] = AIA(order[nextId], attribute2, attribute3, attribute4);
         _safeMint(msg.sender, nextId);
         _setTokenURI(nextId,  string(abi.encodePacked(prefix, uintToString(order[nextId]), sub)));
         emit Mint(msg.sender, nextId, block.timestamp);
         nextId++;
     }
 
-    function getTokenDetails (uint256 tokenId) public view returns (AIA memory){
-        return _tokenDetails[tokenId];
-    }
 
     function getBalance() public view onlyOwner returns (uint256){
         return address(this).balance;
