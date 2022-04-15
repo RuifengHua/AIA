@@ -12,14 +12,6 @@ body {
 	color: #d60f0f;
 }
 
-#btn-logout {
-	color: #ffffff;
-}
-
-#btn-logout:hover {
-	color: #d60f0f;
-}
-
 .menu {
 	height: 100px;
 }
@@ -32,15 +24,15 @@ body {
 }
 .promo {
 	text-align: center;
-	height: 80vh;
 }
 
 .banner {
-	padding-top: 40px;
+	display: flex;
+	flex-direction: column;
 	padding-bottom: 40px;
-	border-radius: 10px;
-	width: 82%;
-	margin-top: 100px;
+	width: 100%;
+	height: 100%;
+
 	text-align: center;
 	display: inline-block;
 	color: #fff;
@@ -103,7 +95,7 @@ body {
 	left: 50%;
 	box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.5);
 	border-radius: 20px;
-	background: #121212;
+	background: #7c7c7c;
 	text-align: center;
 }
 
@@ -344,7 +336,7 @@ body {
 	stroke-width: 2;
 	stroke-miterlimit: 10;
 	stroke: #109b3e;
-	fill: #121212;
+	fill: #7c7c7c;
 	animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
 }
 
@@ -393,7 +385,7 @@ body {
 	width: 100px;
 	height: 40px;
 	color: #ffffff;
-	background: #121212;
+	background: #7c7c7c;
 	border: none;
 	-webkit-transition: all 0.7s ease;
 	transition: all 0.7s ease;
@@ -470,7 +462,7 @@ body {
 }
 
 .card {
-	background-color: #121212;
+	background-color: #7c7c7c;
 	display: inline-block;
 	border-radius: 20px;
 	width: 90%;
@@ -489,7 +481,7 @@ body {
 }
 
 .card-bottom {
-	background-color: #121212;
+	background-color: #7c7c7c;
 	overflow: auto;
 }
 
@@ -625,8 +617,98 @@ body {
 	stroke-dashoffset: 0;
 }
 
-#promo_video {
+#myVideo {
+	z-index: -1;
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	min-width: 100%;
+	min-height: 100%;
+}
+
+.svg_index_button_logout {
+	margin-top: 50px;
+	margin-right: -50px;
+	text-align: center;
+	transform: translate(-50%, -50%);
+	font-size: 17px;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: #ffffff;
+	letter-spacing: 3px;
+	width: 150px;
+	height: 50px;
+	line-height: 50px;
+}
+.svg_index_button_logout:hover {
+	color: #ffffff;
+}
+.svg_index_button_logout svg,
+.svg_index_button_logout svg rect {
+	position: absolute;
+	top: 0;
+	left: 0;
 	width: 100%;
 	height: 100%;
-	margin: 0;
+	fill: transparent;
+}
+.svg_index_button_logout svg rect {
+	stroke: #ffffff;
+	stroke-dasharray: 50 150;
+	stroke-dashoffset: 250;
+	stroke-width: 4;
+	transition: 1s;
+}
+.svg_index_button_logout:hover svg rect {
+	stroke: rgb(255, 255, 255);
+	stroke-dasharray: 200 0;
+	stroke-dashoffset: 0;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,900");
+.headline {
+	font-family: "Roboto", Arial, sans-serif;
+	font-weight: 700;
+	font-size: 170px;
+	margin-bottom: 5px;
+	text-transform: uppercase;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,900");
+.headline-2 {
+	padding-top: 100px;
+	font-family: "Roboto", Arial, sans-serif;
+	background: 0 0;
+	font-weight: 700;
+	font-size: 50px;
+	line-height: 60px;
+	display: inline-block;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,900");
+.headline-3 {
+	font-family: "Roboto", Arial, sans-serif;
+	background: 0 0;
+	font-weight: 600;
+	font-size: 70px;
+	line-height: 60px;
+	display: inline-block;
+}
+
+.index_buttons {
+	padding-top: 300px;
+	height: 60px;
+	position: relative;
+}
+
+.container-2 {
+	position: fixed;
+	left: 50%;
+	bottom: 0px;
+	transform: translate(-50%, -20%);
+	margin: 0 auto;
+}
+
+#mint_reminder {
+	color: #ffffff;
 }

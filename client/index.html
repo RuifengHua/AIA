@@ -29,37 +29,30 @@
 	</head>
 	<body>
 		<div id="tsparticles"></div>
-		<nav class="menu navbar navbar-expand-md navbar-light">
-			<a class="navbar-brand" href="index.html" style="color: #ffffff; font-size: 40px; margin-left: 20px">AIA</a>
-			<div class="navbar-collapse collapse justify-content-end">
-				<div>
-					<ul class="navbar-nav">
-						<li>
-							<a id="btn-logout" href="#" class="link">
-								<span class="word">
-									<span class="char" data-char="l" style="--char-index: 0">l</span>
-									<span class="char" data-char="o" style="--char-index: 1">o</span>
-									<span class="char" data-char="g" style="--char-index: 2">g</span>
-									<span class="char" data-char="o" style="--char-index: 3">o</span>
-									<span class="char" data-char="u" style="--char-index: 4">u</span>
-									<span class="char" data-char="t" style="--char-index: 5">t</span>
-								</span>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
 		<div class="promo">
-			<video id="promo_video" src="https://storage.googleapis.com/aiarts/videos/intro_bg.mp4" muted loop autoplay></video>
-			<div class="container">
+			<video autoplay muted loop id="myVideo">
+				<source src="https://storage.googleapis.com/aiarts/videos/intro_bg.mp4" type="video/mp4" />
+			</video>
+			<nav class="menu navbar navbar-expand-md navbar-light">
+				<a class="navbar-brand" href="index.html" style="color: #ffffff; font-size: 40px; margin-left: 20px">AIA</a>
+
+				<div class="navbar-collapse collapse justify-content-end">
+					<a id="btn-logout" class="svg_index_button_logout" href="#"
+						><svg><rect></rect></svg><strong>logout</strong></a
+					>
+				</div>
+			</nav>
+
+			<div class="container-1">
 				<div class="banner">
-					<div>
+					<div class="headline-2">Discover and explore the world of artificial intelligence arts</div>
+					<div class="headline">Into the unknown</div>
+					<div class="index_buttons">
 						<a id="btn-start" class="svg_index_button" href="#"
-							><svg><rect></rect></svg>Get Started</a
+							><svg><rect></rect></svg><strong>Get Started</strong></a
 						>
 						<a id="btn-login" class="svg_index_button" href="#"
-							><svg><rect></rect></svg>Metamask Login</a
+							><svg><rect></rect></svg><strong>Metamask Login</strong></a
 						>
 					</div>
 				</div>
