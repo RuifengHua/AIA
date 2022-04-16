@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
 		<title>Title</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 		<script src="https://unpkg.com/moralis/dist/moralis.js"></script>
@@ -134,9 +135,12 @@
 				</div>
 			</div>
 		</nav>
-		<a id="btn-mint" class="svg_index_button" href="#"
-			><svg><rect></rect></svg><strong>generate</strong></a
-		>
+		<div class="mint_buttons_container">
+			<a id="btn-mint" class="svg_index_button" href="#"
+				><svg><rect></rect></svg><strong>generate</strong></a
+			>
+		</div>
+
 		<div class="container-2">
 			<div id="mint_reminder">There are a total of 5000 AI arts NFTs with the following distributions</div>
 			<div id="mint_reminder" style="color: grey">
@@ -166,15 +170,13 @@
 		</div>
 
 		<div class="popup-wrap">
-			<div class="popup-box">
-				<div class="success-animation">
-					<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-						<circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
-						<path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-					</svg>
+			<div class="popup-box-minting">
+				<div id="table">
+					<div id="centeralign">Sit tight,we are diving into the unknown...</div>
 				</div>
-				<div id="wrap"></div>
-				<div id="reminder">Waiting for the transaction to be completed</div>
+			</div>
+
+			<div class="popup-box-mint">
 				<div class="btn-bg bg-2">
 					<div class="btn btn-2">
 						<button class="popup-close">Confirm</button>

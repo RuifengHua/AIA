@@ -1,6 +1,6 @@
 Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
 Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0xa74c18eCedA4d0b0D6c100BCF232F8cC96f4D857";
+const CONTRACT_ADDRESS = "0x5321098CBE1573bD99b8be7439F3FF53b40643f2";
 async function init() {
 	try {
 		let user = Moralis.User.current();
