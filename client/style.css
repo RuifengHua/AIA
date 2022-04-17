@@ -1009,7 +1009,7 @@ body {
 }
 
 .flexbox {
-	margin-left: 20px;
+	margin-left: 400px;
 	display: flex;
 	justify-content: center;
 }
