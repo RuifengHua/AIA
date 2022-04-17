@@ -1,6 +1,6 @@
 Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
 Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x5321098CBE1573bD99b8be7439F3FF53b40643f2";
+const CONTRACT_ADDRESS = "0x1D9E092827a383eb1A5FEAad1CA32e201Da85607";
 
 async function init() {
 	try {
@@ -8,7 +8,7 @@ async function init() {
 		if (!user) {
 			location.href = "index.html";
 		}
-		renderGame();
+		renderGame(true, "SID", "");
 	} catch (error) {
 		console.log(error);
 	}
@@ -20,38 +20,106 @@ async function logOut() {
 
 document.getElementById("btn-logout").onclick = logOut;
 
-async function renderGame() {
+async function renderGame(showOwned, sort, keyWord) {
 	$(".container ul").html("");
-	//render properties from SC
 	await Moralis.enableWeb3();
 	let web3 = new window.Web3(Moralis.provider);
 	let abi = await getAbi();
 	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-	let userAIAs = await contract.methods.getAllTokensForUser(ethereum.selectedAddress).call({ from: ethereum.selectedAddress });
-	if (userAIAs.length != 0) {
-		userAIAs.forEach(async (AIAId) => {
-			let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
-			$.getJSON(json, function (data) {
-				renderAIA(AIAId, data, false);
-			});
-		});
-	}
-
-	let useronAuctionAIAs = await contract.methods.getListedItemsForUser(ethereum.selectedAddress).call({ from: ethereum.selectedAddress });
-	if (useronAuctionAIAs.length != 0) {
-		useronAuctionAIAs.forEach(async (AIAId) => {
-			let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
-			$.getJSON(json, function (data) {
-				renderAIA(AIAId, data, true);
-			});
-		});
+	let dataArray = [];
+	if (showOwned) {
+		let userAIAs = await contract.methods.getAllTokensForUser(ethereum.selectedAddress).call({ from: ethereum.selectedAddress });
+		if (userAIAs.length != 0) {
+			for (const AIAId of userAIAs) {
+				let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
+				let data = await $.getJSON(json);
+				if (sort == "SID") {
+					if (keyWord == "" || data.name.includes(keyWord) || AIAId.toString() == keyWord) {
+						renderAIA(AIAId, data, false);
+					}
+				} else {
+					if (keyWord == "" || data.name.includes(keyWord) || AIAId.toString() == keyWord) {
+						{
+							data["id"] = AIAId;
+							dataArray.push(data);
+						}
+					}
+				}
+			}
+		}
+		if (sort != "SID") {
+			dataArray.sort(sortByRarity());
+			if (sort == "RHL") {
+				for (const data of dataArray.reverse()) {
+					renderAIA(data["id"], data, false);
+				}
+			} else {
+				for (const data of dataArray) {
+					renderAIA(data["id"], data, false);
+				}
+			}
+		}
+	} else {
+		let useronAuctionAIAs = await contract.methods.getListedItemsForUser(ethereum.selectedAddress).call({ from: ethereum.selectedAddress });
+		if (useronAuctionAIAs.length != 0) {
+			for (const AIAId of useronAuctionAIAs) {
+				let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
+				let data = await $.getJSON(json);
+				if (sort == "SID") {
+					if (keyWord == "" || data.name.includes(keyWord) || AIAId.toString() == keyWord) {
+						renderAIA(AIAId, data, true);
+					}
+				} else {
+					if (keyWord == "" || data.name.includes(keyWord) || AIAId.toString() == keyWord) {
+						data["id"] = AIAId;
+						dataArray.push(data);
+					}
+				}
+			}
+		}
+		if (sort != "SID") {
+			dataArray.sort(sortByRarity());
+			if (sort == "RHL") {
+				for (const data of dataArray.reverse()) {
+					renderAIA(data["id"], data, true);
+				}
+			} else {
+				for (const data of dataArray) {
+					renderAIA(data["id"], data, true);
+				}
+			}
+		}
 	}
 
 	$("#game").show();
 }
 
+function sortByRarity() {
+	return function (a, b) {
+		if (rarityNum(a.attributes[0]["value"]) > rarityNum(b.attributes[0]["value"])) return 1;
+		else if (rarityNum(a.attributes[0]["value"]) < rarityNum(b.attributes[0]["value"])) return -1;
+
+		return 0;
+	};
+}
+
+function rarityNum(rarity) {
+	if (rarity == "Prestigious") {
+		return 5;
+	} else if (rarity == "Legendary") {
+		return 4;
+	} else if (rarity == "Epic") {
+		return 3;
+	} else if (rarity == "Rare") {
+		return 2;
+	} else if (rarity == "Uncommon") {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 function renderAIA(id, data, onAuction) {
-	console.log(data);
 	let htmlString = ``;
 	if (!onAuction) {
 		htmlString = `
@@ -116,7 +184,7 @@ function renderAIA(id, data, onAuction) {
 			})
 			.on("receipt", () => {
 				popupComplete();
-				renderGame();
+				renderGame(true, "SID", "");
 			});
 	});
 
@@ -133,7 +201,7 @@ function renderAIA(id, data, onAuction) {
 			})
 			.on("receipt", () => {
 				popupComplete();
-				renderGame();
+				renderGame(false, "SID", "");
 			});
 	});
 }
@@ -167,7 +235,51 @@ $(".popup-close").click(() => {
 	$(".popup-box").removeClass("transform-in").addClass("transform-out");
 });
 
+var currentValue = true;
+var currentOrder = "SID";
+function handleClick(myRadio) {
+	if (myRadio.value == 2) {
+		renderGame(false, "SID", "");
+	} else {
+		renderGame(true, "SID", "");
+	}
+	if (myRadio.value == 1) {
+		currentValue = true;
+	} else {
+		currentValue = false;
+	}
+}
+
+$(".RHL").click(() => {
+	renderGame(currentValue, "RHL", "");
+	currentOrder = "RHL";
+});
+$(".RLH").click(() => {
+	renderGame(currentValue, "RLH", "");
+	currentOrder = "RLH";
+});
+$(".SID").click(() => {
+	renderGame(currentValue, "SID", "");
+	currentOrder = "SID";
+});
+
+$("#searchKeyword").keyup(function (e) {
+	if (e.keyCode == 13) {
+		var keyWord = $("#searchKeyword").val();
+		if (keyWord != "") {
+			renderGame(currentValue, currentOrder, keyWord);
+		}
+	}
+});
+
+$(".clearSearch").click(() => {
+	renderGame(currentValue, "SID", "");
+	currentOrder = "SID";
+});
+
 init();
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var $body = document.body,
 	$wrap = document.getElementById("wrap"),

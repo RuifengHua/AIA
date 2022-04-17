@@ -1,13 +1,14 @@
 Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
 Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x5321098CBE1573bD99b8be7439F3FF53b40643f2";
+const CONTRACT_ADDRESS = "0x1D9E092827a383eb1A5FEAad1CA32e201Da85607";
+
 async function init() {
 	try {
 		let user = Moralis.User.current();
 		if (!user) {
 			location.href = "index.html";
 		}
-		renderGame();
+		renderGame("SID", "");
 	} catch (error) {
 		console.log(error);
 	}
@@ -19,40 +20,100 @@ async function logOut() {
 
 document.getElementById("btn-logout").onclick = logOut;
 
-async function renderGame() {
-	$("#AIA_row").html("");
-	//render properties from SC
+async function renderGame(sort, keyWord) {
+	$(".container ul").html("");
 	await Moralis.enableWeb3();
 	let web3 = new window.Web3(Moralis.provider);
 	let abi = await getAbi();
 	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-	let array = await contract.methods.getAllTokensForUser(CONTRACT_ADDRESS).call({ from: ethereum.selectedAddress });
-	if (array.length == 0) {
-		return;
-	}
-	array.forEach(async (AIAId) => {
-		let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
-		$.getJSON(json, function (data) {
-			renderAIA(AIAId, data, true);
-		});
-	});
+	let dataArray = [];
 
+	let listedAIAs = await contract.methods.getAllTokensForUser(CONTRACT_ADDRESS).call({ from: ethereum.selectedAddress });
+	if (listedAIAs.length != 0) {
+		for (const AIAId of listedAIAs) {
+			let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
+			console.log(json);
+			let data = await $.getJSON(json);
+			if (sort == "SID") {
+				if (keyWord == "" || data.name.includes(keyWord) || AIAId.toString() == keyWord) {
+					renderAIA(AIAId, data);
+				}
+			} else {
+				if (keyWord == "" || data.name.includes(keyWord) || AIAId.toString() == keyWord) {
+					data["id"] = AIAId;
+					dataArray.push(data);
+				}
+			}
+		}
+	}
+	if (sort != "SID") {
+		dataArray.sort(sortByRarity());
+		if (sort == "RHL") {
+			for (const data of dataArray.reverse()) {
+				renderAIA(data["id"], data);
+			}
+		} else {
+			for (const data of dataArray) {
+				renderAIA(data["id"], data);
+			}
+		}
+	}
 	$("#game").show();
 }
 
+function sortByRarity() {
+	return function (a, b) {
+		if (rarityNum(a.attributes[0]["value"]) > rarityNum(b.attributes[0]["value"])) return 1;
+		else if (rarityNum(a.attributes[0]["value"]) < rarityNum(b.attributes[0]["value"])) return -1;
+
+		return 0;
+	};
+}
+
+function rarityNum(rarity) {
+	if (rarity == "Prestigious") {
+		return 5;
+	} else if (rarity == "Legendary") {
+		return 4;
+	} else if (rarity == "Epic") {
+		return 3;
+	} else if (rarity == "Rare") {
+		return 2;
+	} else if (rarity == "Uncommon") {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 function renderAIA(id, data) {
-	let htmlString = `
-	<div class="col-md-3 mx-1 card id="pet_${id}">						
-		<img class="card-img-top pet_img" src="${data.image}" />
-		<div class="card-body">
-			<div>Id: <span class="pet_id">${id}</span></div>
+	let htmlString = ``;
+
+	htmlString = `
+		<li class="card" id="card_AIA_${id}">
+			<a class="card-image" href="#" target="_blank">
+				<img src="${data.image}"/>
+			</a>
+			<div class="card-bottom">
+			<p class="description">Id:${id}</p>
+			<p class="description">${data.name}</p>
+			<p class="description">${data.attributes[0]["value"]}</p>
 			<div>
-				<button id="btn_purchase_${id}" class="btn btn-primary btn-block">Purchase</button>
+				<div class="link-wrapper">
+					<a id="btn_purchase_${id}" class="animated-link" href="#">
+						<svg width="210" height="40">
+							<rect class="shape" width="210" height="40"></rect>
+						</svg>
+						<div class="text">Purchase</div>
+					</a>
+				</div>
 			</div>
-		</div>
-	</div>`;
+		<div>
+		</li>`;
+
 	let element = $.parseHTML(htmlString);
-	$("#AIA_row").append(element);
+
+	$(".container ul").append(element);
 
 	$(`#btn_purchase_${id}`).click(async () => {
 		await Moralis.enableWeb3();
@@ -68,7 +129,7 @@ function renderAIA(id, data) {
 			})
 			.on("receipt", () => {
 				popupComplete();
-				renderGame();
+				renderGame("SID", "");
 			});
 	});
 }
@@ -102,7 +163,38 @@ $(".popup-close").click(() => {
 	$(".popup-box").removeClass("transform-in").addClass("transform-out");
 });
 
+var currentOrder = "SID";
+
+$(".RHL").click(() => {
+	renderGame("RHL", "");
+	currentOrder = "RHL";
+});
+$(".RLH").click(() => {
+	renderGame("RLH", "");
+	currentOrder = "RLH";
+});
+$(".SID").click(() => {
+	renderGame("SID", "");
+	currentOrder = "SID";
+});
+
+$("#searchKeyword").keyup(function (e) {
+	if (e.keyCode == 13) {
+		var keyWord = $("#searchKeyword").val();
+		if (keyWord != "") {
+			renderGame(currentOrder, keyWord);
+		}
+	}
+});
+
+$(".clearSearch").click(() => {
+	renderGame("SID", "");
+	currentOrder = "SID";
+});
+
 init();
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var $body = document.body,
 	$wrap = document.getElementById("wrap"),

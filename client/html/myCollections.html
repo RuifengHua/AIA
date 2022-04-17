@@ -134,6 +134,32 @@
 				</div>
 			</div>
 		</nav>
+		<div class="filter" style="color: #ffffff">
+			<strong>Sort</strong>
+			<a href="#" class="btn-sort RHL">by Rarity from High to Low</a>
+			<a href="#" class="btn-sort RLH">by Rarity from Low to High</a>
+			<a href="#" class="btn-sort SID">by Id</a>
+
+			<div class="flexbox">
+				<div class="search">
+					<div>
+						<input id="searchKeyword" type="text" placeholder="Search . . ." />
+					</div>
+				</div>
+			</div>
+			<a href="#" class="clearSearch">CLEAR FILTER</a>
+			<form class="radio-switch">
+				<label>
+					<input type="radio" name="radio" checked onclick="handleClick(this);" value="1" />
+					<span>Show owned</span>
+				</label>
+				<label>
+					<input type="radio" name="radio" onclick="handleClick(this);" value="2" />
+					<span>Show Listed</span>
+				</label>
+			</form>
+		</div>
+
 		<div class="container">
 			<div id="game">
 				<ul class="card-list"></ul>
