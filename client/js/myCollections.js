@@ -1,6 +1,6 @@
 Moralis.initialize("XVakVBb5UPhYx6PL1ODCc9XltLKYQKnpEQmksnuc"); // Application id from moralis.io
 Moralis.serverURL = "https://jhoas5yvsout.usemoralis.com:2053/serverr"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x1D9E092827a383eb1A5FEAad1CA32e201Da85607";
+const CONTRACT_ADDRESS = "0x8bB7a02Cebe8E2D551FfF8a2e6F046241662f146";
 
 async function init() {
 	try {
@@ -141,7 +141,7 @@ function renderAIA(id, data, onAuction) {
 	if (!onAuction) {
 		htmlString = `
 		<li class="card" id="card_AIA_${id}">
-			<a class="card-image" href="#" target="_blank">
+			<a class="card-image" href="viewNFT.html?id=${id}">
 				<img loading="lazy" src="${data.image}"/>
 			</a>
 			<div class="${card_bottom}">
@@ -163,7 +163,7 @@ function renderAIA(id, data, onAuction) {
 	} else {
 		htmlString = `
 		<li class="card" id="card_AIA_${id}">
-			<a class="card-image" href="#" target="_blank">
+			<a class="card-image" href="viewNFT.html" >
 				<img loading="lazy" src="${data.image}"/>
 			</a>
 			<div class="${card_bottom}">
@@ -328,7 +328,7 @@ scene.add(group);
 mesh = new THREE.Mesh(
 	new THREE.TubeGeometry(
 		new (THREE.Curve.create(
-			function () {},
+			function () { },
 			function (percent) {
 				var x = length * Math.sin(pi2 * percent),
 					y = radius * Math.cos(pi2 * 3 * percent),

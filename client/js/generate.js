@@ -1,6 +1,6 @@
 Moralis.initialize("XVakVBb5UPhYx6PL1ODCc9XltLKYQKnpEQmksnuc"); // Application id from moralis.io
 Moralis.serverURL = "https://jhoas5yvsout.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x1D9E092827a383eb1A5FEAad1CA32e201Da85607";
+const CONTRACT_ADDRESS = "0x8bB7a02Cebe8E2D551FfF8a2e6F046241662f146";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -49,14 +49,47 @@ async function mint() {
 	});
 }
 
+function rarityNum(rarity) {
+	if (rarity == "Prestigious") {
+		return 5;
+	} else if (rarity == "Legendary") {
+		return 4;
+	} else if (rarity == "Epic") {
+		return 3;
+	} else if (rarity == "Rare") {
+		return 2;
+	} else if (rarity == "Uncommon") {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+function rarityName(rarity) {
+	if (rarity == "Prestigious") {
+		return "card-bottomP";
+	} else if (rarity == "Legendary") {
+		return "card-bottomL";
+	} else if (rarity == "Epic") {
+		return "card-bottomE";
+	} else if (rarity == "Rare") {
+		return "card-bottomR";
+	} else if (rarity == "Uncommon") {
+		return "card-bottomU";
+	} else {
+		return "card-bottomC";
+	}
+}
+
 function showMintedNFT(id, data) {
+	let card_bottom = rarityName(data.attributes[0]["value"]);
 	$(".popup-box-mint-append").html("");
 	let htmlString = `
 	<div id="newNFTMinted">New NFT Generated!</div>
 	<a class="card-image" href="#" target="_blank">
 		<img src="${data.image}"/>
 	</a>
-	<div class="card-bottom">
+	<div class=${card_bottom}>
 		<p class="description">Id:${id}</p>
 		<p class="description">${data.name}</p>
 		<p class="description">${data.attributes[0]["value"]}</p>

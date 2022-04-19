@@ -1,6 +1,6 @@
 Moralis.initialize("XVakVBb5UPhYx6PL1ODCc9XltLKYQKnpEQmksnuc"); // Application id from moralis.io
 Moralis.serverURL = "https://jhoas5yvsout.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x1D9E092827a383eb1A5FEAad1CA32e201Da85607";
+const CONTRACT_ADDRESS = "0x8bB7a02Cebe8E2D551FfF8a2e6F046241662f146";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -30,10 +30,10 @@ init();
 getUserActivity(Moralis.User.current().get("ethAddress"));
 
 /*
- 	event Mint(address indexed owner, uint256 indexed tokenId, uint256 timestamp);
-    event ListAnItem(address indexed owner, uint256 indexed tokenId, uint256 price, uint256 duration, uint256 timestamp);
-    event CancelAnListedItem(address indexed owner, uint256 indexed tokenId, uint256 timestamp);
-    event PurchaseAnItem(address indexed buyer, uint256 indexed tokenId, address indexed seller, uint256 price, uint256 timestamp);
+	  event Mint(address indexed owner, uint256 indexed tokenId, uint256 timestamp);
+	event ListAnItem(address indexed owner, uint256 indexed tokenId, uint256 price, uint256 duration, uint256 timestamp);
+	event CancelAnListedItem(address indexed owner, uint256 indexed tokenId, uint256 timestamp);
+	event PurchaseAnItem(address indexed buyer, uint256 indexed tokenId, address indexed seller, uint256 price, uint256 timestamp);
 */
 
 async function getUserActivity(userAddress) {

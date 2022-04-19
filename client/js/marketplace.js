@@ -1,6 +1,6 @@
 Moralis.initialize("XVakVBb5UPhYx6PL1ODCc9XltLKYQKnpEQmksnuc"); // Application id from moralis.io
 Moralis.serverURL = "https://jhoas5yvsout.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x1D9E092827a383eb1A5FEAad1CA32e201Da85607";
+const CONTRACT_ADDRESS = "0x8bB7a02Cebe8E2D551FfF8a2e6F046241662f146";
 
 async function init() {
 	try {
@@ -242,7 +242,7 @@ scene.add(group);
 mesh = new THREE.Mesh(
 	new THREE.TubeGeometry(
 		new (THREE.Curve.create(
-			function () {},
+			function () { },
 			function (percent) {
 				var x = length * Math.sin(pi2 * percent),
 					y = radius * Math.cos(pi2 * 3 * percent),

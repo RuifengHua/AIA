@@ -1260,3 +1260,22 @@ label span:before {
 	-moz-box-shadow: 0 6px 6px -6px #0e1119;
 	box-shadow: 0 6px 6px -6px #0e1119;
 }
+.viewNFTimg{
+	display: flex;
+	justify-content: center;
+}
+
+.nftimage{
+	border-radius: 10px;
+	height: 70%;
+	width: 70%;
+}
+
+.viewNFTDescription{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	margin-left: 100px;
+	font-size: 30px;
+	color: #ffffff;
+}
