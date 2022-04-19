@@ -1,5 +1,5 @@
-Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
-Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
+Moralis.initialize("XVakVBb5UPhYx6PL1ODCc9XltLKYQKnpEQmksnuc"); // Application id from moralis.io
+Moralis.serverURL = "https://jhoas5yvsout.usemoralis.com:2053/server"; //Server url from moralis.io
 const CONTRACT_ADDRESS = "0x1D9E092827a383eb1A5FEAad1CA32e201Da85607";
 
 async function init() {
@@ -86,15 +86,31 @@ function rarityNum(rarity) {
 	}
 }
 
+function rarityName(rarity) {
+	if (rarity == "Prestigious") {
+		return "card-bottomP";
+	} else if (rarity == "Legendary") {
+		return "card-bottomL";
+	} else if (rarity == "Epic") {
+		return "card-bottomE";
+	} else if (rarity == "Rare") {
+		return "card-bottomR";
+	} else if (rarity == "Uncommon") {
+		return "card-bottomU";
+	} else {
+		return "card-bottomC";
+	}
+}
+
 function renderAIA(id, data) {
 	let htmlString = ``;
-
+	let card_bottom = rarityName(data.attributes[0]["value"]);
 	htmlString = `
 		<li class="card" id="card_AIA_${id}">
 			<a class="card-image" href="#" target="_blank">
-				<img src="${data.image}"/>
+				<img loading="lazy" src="${data.image}"/>
 			</a>
-			<div class="card-bottom">
+			<div class="${card_bottom}">
 			<p class="description">Id:${id}</p>
 			<p class="description">${data.name}</p>
 			<p class="description">${data.attributes[0]["value"]}</p>

@@ -1,5 +1,5 @@
-Moralis.initialize("WjhjvrFqH8ySfeGF8v8Ip7MTjL8XPPKKI6jSuFxX"); // Application id from moralis.io
-Moralis.serverURL = "https://rcoy3yxqob8k.usemoralis.com:2053/server"; //Server url from moralis.io
+Moralis.initialize("XVakVBb5UPhYx6PL1ODCc9XltLKYQKnpEQmksnuc"); // Application id from moralis.io
+Moralis.serverURL = "https://jhoas5yvsout.usemoralis.com:2053/server"; //Server url from moralis.io
 const CONTRACT_ADDRESS = "0x1D9E092827a383eb1A5FEAad1CA32e201Da85607";
 async function init() {
 	try {
