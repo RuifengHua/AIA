@@ -1029,7 +1029,7 @@ body {
 }
 
 .flexbox {
-	margin-left: 400px;
+	margin-left: 200px;
 	display: flex;
 	justify-content: center;
 }
@@ -1171,8 +1171,8 @@ label span:before {
 }
 
 .container_activity td:hover {
-	background-color: #242424;
-	color: #ffffff;
+	background-color: #ffd1d1;
+	color: #000000;
 	font-weight: bold;
 
 	box-shadow: #7f7c21 -1px 1px, #7f7c21 -2px 2px, #7f7c21 -3px 3px, #7f7c21 -4px 4px, #7f7c21 -5px 5px, #7f7c21 -6px 6px;
@@ -1188,6 +1188,11 @@ label span:before {
 	background-color: #4d8647;
 }
 
+.container_activity tr.trgenerate td {
+	text-align: center;
+}
+
+
 .container_activity tr.trgenerate:hover {
 	background-color: #2d4e2a;
 	-webkit-box-shadow: 0 6px 6px -6px #0e1119;
@@ -1197,6 +1202,10 @@ label span:before {
 
 .container_activity tr.trcancelListing {
 	background-color: #962727;
+}
+
+.container_activity tr.trcancelListing td {
+	text-align: center;
 }
 
 .container_activity tr.trcancelListing:hover {
@@ -1210,6 +1219,11 @@ label span:before {
 	background-color: #264586;
 }
 
+.container_activity tr.trlisting td {
+	text-align: center;
+}
+
+
 .container_activity tr.trlisting:hover {
 	background-color: #15274e;
 	-webkit-box-shadow: 0 6px 6px -6px #0e1119;
@@ -1221,11 +1235,19 @@ label span:before {
 	background-color: #8f2864;
 }
 
+.container_activity tr.trpurchase td {
+	text-align: center;
+}
+
 .container_activity tr.trpurchase:hover {
 	background-color: rgb(85, 24, 60);
 	-webkit-box-shadow: 0 6px 6px -6px #0e1119;
 	-moz-box-shadow: 0 6px 6px -6px #0e1119;
 	box-shadow: 0 6px 6px -6px #0e1119;
+}
+
+.container_activity tr.trsold td {
+	text-align: center;
 }
 
 .container_activity tr.trsold {

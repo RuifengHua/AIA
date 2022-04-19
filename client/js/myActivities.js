@@ -141,8 +141,8 @@ function renderActivities(allActivities) {
 				<tr class="trgenerate">
 					<td>${obj.event}</td>
 					<td>TokenId:\n${obj.TokenId}</td>
-					<td> </td>
-					<td> </td>
+					<td>N/A</td>
+					<td>N/A</td>
 					<td>${obj.time}</td>
 				</tr>
 				`;
@@ -152,7 +152,7 @@ function renderActivities(allActivities) {
 				<tr class = "trlisting">
 					<td>${obj.event}</td>
 					<td>TokenId:\n${obj.TokenId}</td>
-					<td> </td>
+					<td>N/A</td>
 					<td>Price:\n${obj.price} eth</td>
 					<td>${obj.time}</td>
 				</tr>
@@ -163,8 +163,8 @@ function renderActivities(allActivities) {
 				<tr class = "trcancelListing">
 					<td>${obj.event}</td>
 					<td>TokenId:\n${obj.TokenId}</td>
-					<td> </td>
-					<td> </td>
+					<td>N/A</td>
+					<td>N/A</td>
 					<td>${obj.time}</td>
 				</tr>
 				`;
