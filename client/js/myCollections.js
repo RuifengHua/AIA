@@ -1,6 +1,6 @@
 Moralis.initialize("XVakVBb5UPhYx6PL1ODCc9XltLKYQKnpEQmksnuc"); // Application id from moralis.io
 Moralis.serverURL = "https://jhoas5yvsout.usemoralis.com:2053/serverr"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x8bB7a02Cebe8E2D551FfF8a2e6F046241662f146";
+const CONTRACT_ADDRESS = "0xEd124f9377DEB6b6B0f5099a8E15015Da51977A3";
 
 async function init() {
 	try {
@@ -163,7 +163,7 @@ function renderAIA(id, data, onAuction) {
 	} else {
 		htmlString = `
 		<li class="card" id="card_AIA_${id}">
-			<a class="card-image" href="viewNFT.html" >
+			<a class="card-image" href="viewNFT.html?id=${id}">
 				<img loading="lazy" src="${data.image}"/>
 			</a>
 			<div class="${card_bottom}">
@@ -194,7 +194,7 @@ function renderAIA(id, data, onAuction) {
 		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
 		const amount = web3.utils.toWei("0.01", "ether");
 		contract.methods
-			.sell(id, amount, 3600000)
+			.sell(id, amount)
 			.send({ from: ethereum.selectedAddress })
 			.on("transactionHash", function (hash) {
 				popupLoading();
@@ -328,7 +328,7 @@ scene.add(group);
 mesh = new THREE.Mesh(
 	new THREE.TubeGeometry(
 		new (THREE.Curve.create(
-			function () { },
+			function () {},
 			function (percent) {
 				var x = length * Math.sin(pi2 * percent),
 					y = radius * Math.cos(pi2 * 3 * percent),

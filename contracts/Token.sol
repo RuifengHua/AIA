@@ -93,7 +93,7 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
 
 
     event Mint(address indexed owner, uint256 indexed tokenId, uint256 timestamp);
-    event ListAnItem(address indexed owner, uint256 indexed tokenId, uint256 price, uint256 duration, uint256 timestamp);
+    event ListAnItem(address indexed owner, uint256 indexed tokenId, uint256 price, uint256 timestamp);
     event CancelAnListedItem(address indexed owner, uint256 indexed tokenId, uint256 timestamp);
     event PurchaseAnItem(address indexed buyer, uint256 indexed tokenId, address indexed seller, uint256 price, uint256 timestamp);
     /////////////////////////////////////////////Token Contract///////////////////////////////////////////////////
@@ -151,7 +151,6 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
     struct Item {
         address payable seller;
         uint256 price;
-        uint256 duration;
         uint256 startedAt;
         bool isSelling;
     }
@@ -159,19 +158,21 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
     mapping (address => uint256) userToListedItems;
     mapping (uint256 => Item) tokenIdToItem;
 
-    function sell(uint256 _tokenId, uint256 _price, uint256 _duration) external nonReentrant {
+    function getItemDetail(uint256 _tokenId) external view returns (Item memory){
+        return tokenIdToItem[_tokenId];
+    }
+
+    function sell(uint256 _tokenId, uint256 _price) external nonReentrant {
         require(ownerOf(_tokenId) == msg.sender);
-        require(_duration >= 1 minutes);
         tokenIdToItem[_tokenId] = Item(
             payable(msg.sender),
             _price,
-            _duration,
             block.timestamp,
             true
         );
         safeTransferFrom(msg.sender, address(this), _tokenId);
         userToListedItems[msg.sender] ++;
-        emit ListAnItem(msg.sender, _tokenId, _price, _duration, block.timestamp);
+        emit ListAnItem(msg.sender, _tokenId, _price, block.timestamp);
     }
 
     function cancelSell(uint256 _tokenId) external nonReentrant {

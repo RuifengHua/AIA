@@ -1,6 +1,6 @@
 Moralis.initialize("XVakVBb5UPhYx6PL1ODCc9XltLKYQKnpEQmksnuc"); // Application id from moralis.io
 Moralis.serverURL = "https://jhoas5yvsout.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x8bB7a02Cebe8E2D551FfF8a2e6F046241662f146";
+const CONTRACT_ADDRESS = "0xEd124f9377DEB6b6B0f5099a8E15015Da51977A3";
 
 async function init() {
 	try {
@@ -32,7 +32,6 @@ async function renderGame(sort, keyWord) {
 	if (listedAIAs.length != 0) {
 		for (const AIAId of listedAIAs) {
 			let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
-			console.log(json);
 			let data = await $.getJSON(json);
 			if (sort == "SID") {
 				if (keyWord == "" || data.name.includes(keyWord) || AIAId.toString() == keyWord) {
@@ -102,12 +101,39 @@ function rarityName(rarity) {
 	}
 }
 
-function renderAIA(id, data) {
+async function renderAIA(id, data) {
 	let htmlString = ``;
 	let card_bottom = rarityName(data.attributes[0]["value"]);
-	htmlString = `
+	let web3 = new window.Web3(Moralis.provider);
+	let abi = await getAbi();
+	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+	let status = await checkStatus(id, contract);
+	if (status == "userListing") {
+		htmlString = `
 		<li class="card" id="card_AIA_${id}">
-			<a class="card-image" href="#" target="_blank">
+			<a class="card-image" href="viewNFT.html?id=${id}">
+				<img loading="lazy" src="${data.image}"/>
+			</a>
+			<div class="${card_bottom}">
+			<p class="description">Id:${id}</p>
+			<p class="description">${data.name}</p>
+			<p class="description">${data.attributes[0]["value"]}</p>
+			<div>
+				<div class="link-wrapper">
+					<a id="btn_cancel_sell_${id}" class="animated-link" href="#">
+						<svg width="210" height="40">
+							<rect class="shape" width="210" height="40"></rect>
+						</svg>
+						<div class="text">Cancel</div>
+					</a>
+				</div>
+			</div>
+		<div>
+		</li>`;
+	} else {
+		htmlString = `
+		<li class="card" id="card_AIA_${id}">
+			<a class="card-image" href="viewNFT.html?id=${id}">
 				<img loading="lazy" src="${data.image}"/>
 			</a>
 			<div class="${card_bottom}">
@@ -126,6 +152,7 @@ function renderAIA(id, data) {
 			</div>
 		<div>
 		</li>`;
+	}
 
 	let element = $.parseHTML(htmlString);
 
@@ -133,9 +160,7 @@ function renderAIA(id, data) {
 
 	$(`#btn_purchase_${id}`).click(async () => {
 		await Moralis.enableWeb3();
-		let web3 = new window.Web3(Moralis.provider);
-		let abi = await getAbi();
-		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+
 		const amount = web3.utils.toWei("0.012", "ether");
 		contract.methods
 			.purchaseItem(id)
@@ -148,6 +173,35 @@ function renderAIA(id, data) {
 				renderGame("SID", "");
 			});
 	});
+
+	$(`#btn_cancel_sell_${id}`).click(async () => {
+		await Moralis.enableWeb3();
+		let web3 = new window.Web3(Moralis.provider);
+		let abi = await getAbi();
+		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+		contract.methods
+			.cancelSell(id)
+			.send({ from: ethereum.selectedAddress })
+			.on("transactionHash", function (hash) {
+				popupLoading();
+			})
+			.on("receipt", () => {
+				popupComplete();
+				renderGame("SID", "");
+			});
+	});
+}
+
+async function checkStatus(tokenId, contract) {
+	let status = "undefined";
+	let owner = await contract.methods.ownerOf(tokenId).call({ from: ethereum.selectedAddress });
+	let tokenDetail = await contract.methods.getItemDetail(tokenId).call({ from: ethereum.selectedAddress });
+	if (owner == CONTRACT_ADDRESS && tokenDetail.seller.toLowerCase() == Moralis.User.current().get("ethAddress")) {
+		status = "userListing";
+	} else {
+		status = "otherUserOwn";
+	}
+	return status;
 }
 
 function getAbi() {
@@ -242,7 +296,7 @@ scene.add(group);
 mesh = new THREE.Mesh(
 	new THREE.TubeGeometry(
 		new (THREE.Curve.create(
-			function () { },
+			function () {},
 			function (percent) {
 				var x = length * Math.sin(pi2 * percent),
 					y = radius * Math.cos(pi2 * 3 * percent),

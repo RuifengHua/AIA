@@ -1192,7 +1192,6 @@ label span:before {
 	text-align: center;
 }
 
-
 .container_activity tr.trgenerate:hover {
 	background-color: #2d4e2a;
 	-webkit-box-shadow: 0 6px 6px -6px #0e1119;
@@ -1222,7 +1221,6 @@ label span:before {
 .container_activity tr.trlisting td {
 	text-align: center;
 }
-
 
 .container_activity tr.trlisting:hover {
 	background-color: #15274e;
@@ -1260,22 +1258,22 @@ label span:before {
 	-moz-box-shadow: 0 6px 6px -6px #0e1119;
 	box-shadow: 0 6px 6px -6px #0e1119;
 }
-.viewNFTimg{
+.viewNFTimg {
 	display: flex;
-	justify-content: center;
+	direction: column;
+	justify-content: space-evenly;
 }
 
-.nftimage{
+.nftimage {
 	border-radius: 10px;
-	height: 70%;
-	width: 70%;
+	height: 700px;
+	width: 700px;
 }
 
-.viewNFTDescription{
+.viewNFTDescription {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
-	margin-left: 100px;
-	font-size: 30px;
+	font-size: 20px;
 	color: #ffffff;
 }
