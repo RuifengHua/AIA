@@ -1,196 +1,214 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-		<title>Title</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-		<script src="https://unpkg.com/moralis/dist/moralis.js"></script>
-		<script
-			src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-			integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-			crossorigin="anonymous"
-		></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
-		<link
-			rel="stylesheet"
-			href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-			integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-			crossorigin="anonymous"
-		/>
-		<link rel="stylesheet" href="../style.css" />
-		<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-		<link rel="stylesheet" href="../fonts/icomoon/style.css" />
-		<link rel="stylesheet" href="../fonts/flaticon/font/flaticon.css" />
-		<link rel="stylesheet" href="../css/style.css" />
-	</head>
-	<body>
-		<div id="tsparticles"></div>
-		<nav class="menu navbar navbar-expand-md navbar-light">
-			<a class="navbar-brand" href="../index.html" style="color: #ffffff; font-size: 40px; margin-left: 20px">AIA</a>
-			<div class="navbar-collapse collapse justify-content-end">
-				<div>
-					<ul class="navbar-nav">
-						<li>
-							<a href="../index.html" class="link">
-								<span class="word">
-									<span class="char" data-char="h" style="--char-index: 0">h</span>
-									<span class="char" data-char="o" style="--char-index: 1">o</span>
-									<span class="char" data-char="m" style="--char-index: 2">m</span>
-									<span class="char" data-char="e" style="--char-index: 3">e</span>
-								</span>
-							</a>
-						</li>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-						<li>
-							<a href="generate.html" class="link">
-								<span class="word">
-									<span class="char" data-char="g" style="--char-index: 0">g</span>
-									<span class="char" data-char="e" style="--char-index: 1">e</span>
-									<span class="char" data-char="n" style="--char-index: 2">n</span>
-									<span class="char" data-char="e" style="--char-index: 3">e</span>
-									<span class="char" data-char="r" style="--char-index: 4">r</span>
-									<span class="char" data-char="a" style="--char-index: 5">a</span>
-									<span class="char" data-char="t" style="--char-index: 6">t</span>
-									<span class="char" data-char="e" style="--char-index: 7">e</span>
-								</span>
-							</a>
-						</li>
+	<title>Title</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+	<link rel="stylesheet" href="../style.css" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&family=Roboto+Mono:wght@400;500;700&display=swap"
+		rel="stylesheet" />
+	<link rel="stylesheet" href="../fonts/icomoon/style.css" />
+	<link rel="stylesheet" href="../fonts/flaticon/font/flaticon.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+</head>
 
-						<li>
-							<a href="myCollections.html" class="link">
-								<span class="word">
-									<span class="char" data-char="m" style="--char-index: 0">m</span>
-									<span class="char" data-char="y" style="--char-index: 1">y</span>
-									<span class="char" data-char=" " style="--char-index: 2"> </span>
-									<span class="char" data-char="c" style="--char-index: 3">c</span>
-									<span class="char" data-char="o" style="--char-index: 4">o</span>
-									<span class="char" data-char="l" style="--char-index: 5">l</span>
-									<span class="char" data-char="l" style="--char-index: 6">l</span>
-									<span class="char" data-char="e" style="--char-index: 7">e</span>
-									<span class="char" data-char="c" style="--char-index: 8">c</span>
-									<span class="char" data-char="t" style="--char-index: 9">t</span>
-									<span class="char" data-char="i" style="--char-index: 10">i</span>
-									<span class="char" data-char="o" style="--char-index: 11">o</span>
-									<span class="char" data-char="n" style="--char-index: 12">n</span>
-									<span class="char" data-char="s" style="--char-index: 13">s</span>
-								</span>
-							</a>
-						</li>
+<body>
+	<div id="tsparticles"></div>
+	<nav class="menu navbar navbar-expand-md navbar-light">
+		<a class="navbar-brand" href="../index.html" style="color: #ffffff; font-size: 40px; margin-left: 20px">AIA</a>
+		<div class="navbar-collapse collapse justify-content-end">
+			<div>
 
-						<li>
-							<a href="myActivities.html" class="link">
-								<span class="word">
-									<span class="char" data-char="m" style="--char-index: 0">m</span>
-									<span class="char" data-char="y" style="--char-index: 1">y</span>
-									<span class="char" data-char=" " style="--char-index: 2"> </span>
-									<span class="char" data-char="a" style="--char-index: 3">a</span>
-									<span class="char" data-char="c" style="--char-index: 4">c</span>
-									<span class="char" data-char="t" style="--char-index: 5">t</span>
-									<span class="char" data-char="i" style="--char-index: 6">i</span>
-									<span class="char" data-char="v" style="--char-index: 7">v</span>
-									<span class="char" data-char="i" style="--char-index: 8">i</span>
-									<span class="char" data-char="t" style="--char-index: 9">t</span>
-									<span class="char" data-char="i" style="--char-index: 10">i</span>
-									<span class="char" data-char="e" style="--char-index: 11">e</span>
-									<span class="char" data-char="s" style="--char-index: 12">s</span>
-								</span>
-							</a>
-						</li>
 
-						<li>
-							<a href="marketplace.html" class="link">
-								<span class="word">
-									<span class="char" data-char="m" style="--char-index: 0">m</span>
-									<span class="char" data-char="a" style="--char-index: 1">a</span>
-									<span class="char" data-char="r" style="--char-index: 2">r</span>
-									<span class="char" data-char="k" style="--char-index: 3">k</span>
-									<span class="char" data-char="e" style="--char-index: 4">e</span>
-									<span class="char" data-char="t" style="--char-index: 5">t</span>
-									<span class="char" data-char="p" style="--char-index: 6">p</span>
-									<span class="char" data-char="l" style="--char-index: 7">l</span>
-									<span class="char" data-char="a" style="--char-index: 8">a</span>
-									<span class="char" data-char="c" style="--char-index: 9">c</span>
-									<span class="char" data-char="e" style="--char-index: 10">e</span>
-								</span>
-							</a>
-						</li>
 
-						<li>
-							<a id="btn-logout" href="../index.html" class="link">
-								<span class="word">
-									<span class="char" data-char="l" style="--char-index: 0">l</span>
-									<span class="char" data-char="o" style="--char-index: 1">o</span>
-									<span class="char" data-char="g" style="--char-index: 2">g</span>
-									<span class="char" data-char="o" style="--char-index: 3">o</span>
-									<span class="char" data-char="u" style="--char-index: 4">u</span>
-									<span class="char" data-char="t" style="--char-index: 5">t</span>
-								</span>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-		<div class="mint_buttons_container">
-			<a id="btn-mint" class="svg_index_button" href="#"
-				><svg><rect></rect></svg><strong>generate</strong></a
-			>
-		</div>
-
-		<div class="container-2">
-			<div id="mint_reminder">There are a total of 5000 AI arts NFTs with the following distributions</div>
-			<div id="mint_reminder" style="color: grey">
-				Common:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp3000
-				&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp60%
-			</div>
-			<div id="mint_reminder">
-				Uncommon:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp1000
-				&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp20%
-			</div>
-			<div id="mint_reminder" style="color: rgb(124, 124, 212)">
-				Rare:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp500
-				&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp10%
-			</div>
-			<div id="mint_reminder" style="color: rgb(247, 26, 180)">
-				Epic:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp300
-				&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp6%
-			</div>
-			<div id="mint_reminder" style="color: rgb(255, 174, 0)">
-				Legendary:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp150
-				&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp3%
-			</div>
-			<div id="mint_reminder" style="color: red">
-				Prestigious:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp50
-				&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp1%
-			</div>
-		</div>
-
-		<div class="popup-wrap">
-			<div class="popup-box-minting">
-				<div id="table">
-					<div id="centeralign">Sit tight,we are diving into the unknown...</div>
-				</div>
-			</div>
-
-			<div class="popup-box-mint">
-				<div class="popup-box-mint-append"></div>
-				<div class="btn-bg bg-2">
-					<div class="btn btn-2">
-						<button class="popup-close">Confirm</button>
+				<ul class="navbar-nav">
+					<div class="social">
+						<ul id="social-list">
+							<li class="list-item"><a class="item-link Telegram" href="../index.html">Home</a>
+							</li>
+							<li class="list-item"><a class="item-link Twitter" href="generate.html">Generate</a></li>
+							<li class="list-item"><a class="item-link Medium" href="myCollections.html">My
+									Collections</a></li>
+							<li class="list-item"><a class="item-link Codepen" href="myActivities.html">My
+									Activities</a></li>
+							<li class="list-item"><a class="item-link Github" href="marketplace.html">MarketPlace</a>
+							</li>
+						</ul>
 					</div>
-				</div>
+
+					<li>
+
+						<a href="../index.html" class="link">
+							<span class="word">
+								<span class="char" data-char="h" style="--char-index: 0">h</span>
+								<span class="char" data-char="o" style="--char-index: 1">o</span>
+								<span class="char" data-char="m" style="--char-index: 2">m</span>
+								<span class="char" data-char="e" style="--char-index: 3">e</span>
+							</span>
+						</a>
+					</li>
+
+					<li>
+						<a href="generate.html" class="link">
+							<span class="word">
+								<span class="char" data-char="g" style="--char-index: 0">g</span>
+								<span class="char" data-char="e" style="--char-index: 1">e</span>
+								<span class="char" data-char="n" style="--char-index: 2">n</span>
+								<span class="char" data-char="e" style="--char-index: 3">e</span>
+								<span class="char" data-char="r" style="--char-index: 4">r</span>
+								<span class="char" data-char="a" style="--char-index: 5">a</span>
+								<span class="char" data-char="t" style="--char-index: 6">t</span>
+								<span class="char" data-char="e" style="--char-index: 7">e</span>
+							</span>
+						</a>
+					</li>
+
+					<li>
+						<a href="myCollections.html" class="link">
+							<span class="word">
+								<span class="char" data-char="m" style="--char-index: 0">m</span>
+								<span class="char" data-char="y" style="--char-index: 1">y</span>
+								<span class="char" data-char=" " style="--char-index: 2"> </span>
+								<span class="char" data-char="c" style="--char-index: 3">c</span>
+								<span class="char" data-char="o" style="--char-index: 4">o</span>
+								<span class="char" data-char="l" style="--char-index: 5">l</span>
+								<span class="char" data-char="l" style="--char-index: 6">l</span>
+								<span class="char" data-char="e" style="--char-index: 7">e</span>
+								<span class="char" data-char="c" style="--char-index: 8">c</span>
+								<span class="char" data-char="t" style="--char-index: 9">t</span>
+								<span class="char" data-char="i" style="--char-index: 10">i</span>
+								<span class="char" data-char="o" style="--char-index: 11">o</span>
+								<span class="char" data-char="n" style="--char-index: 12">n</span>
+								<span class="char" data-char="s" style="--char-index: 13">s</span>
+							</span>
+						</a>
+					</li>
+
+					<li>
+						<a href="myActivities.html" class="link">
+							<span class="word">
+								<span class="char" data-char="m" style="--char-index: 0">m</span>
+								<span class="char" data-char="y" style="--char-index: 1">y</span>
+								<span class="char" data-char=" " style="--char-index: 2"> </span>
+								<span class="char" data-char="a" style="--char-index: 3">a</span>
+								<span class="char" data-char="c" style="--char-index: 4">c</span>
+								<span class="char" data-char="t" style="--char-index: 5">t</span>
+								<span class="char" data-char="i" style="--char-index: 6">i</span>
+								<span class="char" data-char="v" style="--char-index: 7">v</span>
+								<span class="char" data-char="i" style="--char-index: 8">i</span>
+								<span class="char" data-char="t" style="--char-index: 9">t</span>
+								<span class="char" data-char="i" style="--char-index: 10">i</span>
+								<span class="char" data-char="e" style="--char-index: 11">e</span>
+								<span class="char" data-char="s" style="--char-index: 12">s</span>
+							</span>
+						</a>
+					</li>
+
+					<li>
+						<a href="marketplace.html" class="link">
+							<span class="word">
+								<span class="char" data-char="m" style="--char-index: 0">m</span>
+								<span class="char" data-char="a" style="--char-index: 1">a</span>
+								<span class="char" data-char="r" style="--char-index: 2">r</span>
+								<span class="char" data-char="k" style="--char-index: 3">k</span>
+								<span class="char" data-char="e" style="--char-index: 4">e</span>
+								<span class="char" data-char="t" style="--char-index: 5">t</span>
+								<span class="char" data-char="p" style="--char-index: 6">p</span>
+								<span class="char" data-char="l" style="--char-index: 7">l</span>
+								<span class="char" data-char="a" style="--char-index: 8">a</span>
+								<span class="char" data-char="c" style="--char-index: 9">c</span>
+								<span class="char" data-char="e" style="--char-index: 10">e</span>
+							</span>
+						</a>
+					</li>
+
+					<li>
+						<a id="btn-logout" href="../index.html" class="link">
+							<span class="word">
+								<span class="char" data-char="l" style="--char-index: 0">l</span>
+								<span class="char" data-char="o" style="--char-index: 1">o</span>
+								<span class="char" data-char="g" style="--char-index: 2">g</span>
+								<span class="char" data-char="o" style="--char-index: 3">o</span>
+								<span class="char" data-char="u" style="--char-index: 4">u</span>
+								<span class="char" data-char="t" style="--char-index: 5">t</span>
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="mint_buttons_container">
+		<a id="btn-mint" class="svg_index_button" href="#"><svg>
+				<rect></rect>
+			</svg><strong>generate</strong></a>
+	</div>
+
+	<div class="container-2">
+		<div id="mint_reminder">There are a total of 5000 AI arts NFTs with the following distributions</div>
+		<div id="mint_reminder" style="color: grey">
+			Common:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp3000
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp60%
+		</div>
+		<div id="mint_reminder">
+			Uncommon:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp1000
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp20%
+		</div>
+		<div id="mint_reminder" style="color: rgb(124, 124, 212)">
+			Rare:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp500
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp10%
+		</div>
+		<div id="mint_reminder" style="color: rgb(247, 26, 180)">
+			Epic:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp300
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp6%
+		</div>
+		<div id="mint_reminder" style="color: rgb(255, 174, 0)">
+			Legendary:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp150
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp3%
+		</div>
+		<div id="mint_reminder" style="color: red">
+			Prestigious:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp50
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp1%
+		</div>
+	</div>
+
+	<div class="popup-wrap">
+		<div class="popup-box-minting">
+			<div id="table">
+				<div id="centeralign">Sit tight,we are diving into the unknown...</div>
 			</div>
 		</div>
 
-		<script src="../../node_modules/tsparticles/tsparticles.engine.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/tsparticles/tsparticles.bundle.min.js"></script>
-		<script src="../../node_modules\jquery-particles\dist\jquery.particles.js"></script>
-		<script type="text/javascript" src="../js/tsParticle.js"></script>
+		<div class="popup-box-mint">
+			<div class="popup-box-mint-append"></div>
+			<div class="btn-bg bg-2">
+				<div class="btn btn-2">
+					<button class="popup-close">Confirm</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-		<script type="text/javascript" src="../js/generate.js"></script>
-	</body>
+	<script src="../../node_modules/tsparticles/tsparticles.engine.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/tsparticles/tsparticles.bundle.min.js"></script>
+	<script src="../../node_modules\jquery-particles\dist\jquery.particles.js"></script>
+	<script type="text/javascript" src="../js/tsParticle.js"></script>
+
+	<script type="text/javascript" src="../js/generate.js"></script>
+</body>
+
 </html>

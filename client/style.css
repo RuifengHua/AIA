@@ -1277,3 +1277,52 @@ label span:before {
 	font-size: 20px;
 	color: #ffffff;
 }
+
+
+html .social, body .social {
+	position: absolute;
+	bottom: 30px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 600px;
+	text-align: center;
+  }
+  html .list-item, body .list-item {
+	display: inline-block;
+	width: 110px;
+	text-align: center;
+  }
+  html .list-item .item-link, body .list-item .item-link {
+	font-size: 12px;
+	text-decoration: none;
+	color: #7F7F7F;
+	transition: 0.3s ease-out all;
+  }
+  html .list-item .item-link:focus, body .list-item .item-link:focus {
+	outline: none;
+  }
+  html .list-item .item-link:after, body .list-item .item-link:after {
+	content: "";
+	position: relative;
+	width: 0;
+	height: 1px;
+	display: block;
+	z-index: 100;
+	background-color: cyan;
+	transition: 0.3s ease-out all;
+	left: 50%;
+	top: 5px;
+	transform: translateX(-50%);
+  }
+  html .list-item .item-link:hover, body .list-item .item-link:hover {
+	color: #eee;
+	cursor: help;
+  }
+  html .list-item .item-link:hover:after, body .list-item .item-link:hover:after {
+	width: 50px;
+  }
+  
+  .randomCharacter {
+	display: inline-block;
+	height: 10px;
+  }
