@@ -1,7 +1,7 @@
 Moralis.initialize("IFFbErUlZh9fWkqDiN7hTC0rFcgYHl3INyKAsdsc"); // Application id from moralis.io
 Moralis.serverURL = "https://vbomok1hrisb.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x9C614f63A8A48C1821C8F51F5546D5781CD5E80E";
-
+const CONTRACT_ADDRESS = "0x2e64B0919c2891Ce0916e9d42A7bd3a94A897f74";
+var sell_id = 0;
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -188,21 +188,8 @@ function renderAIA(id, data, onAuction) {
 	$(".container ul").append(element);
 
 	$(`#btn_sell_${id}`).click(async () => {
-		await Moralis.enableWeb3();
-		let web3 = new window.Web3(Moralis.provider);
-		let abi = await getAbi();
-		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-		const amount = web3.utils.toWei("0.01", "ether");
-		contract.methods
-			.sell(id, amount)
-			.send({ from: ethereum.selectedAddress })
-			.on("transactionHash", function (hash) {
-				popupLoading();
-			})
-			.on("receipt", () => {
-				popupComplete();
-				renderGame(true, "SID", "");
-			});
+		sell_id = id
+		popupLoading_sell()
 	});
 
 	$(`#btn_cancel_sell_${id}`).click(async () => {
@@ -251,6 +238,55 @@ $(".popup-close").click(() => {
 	$(".popup-wrap").fadeOut(500);
 	$(".popup-box").removeClass("transform-in").addClass("transform-out");
 });
+
+
+$(".popup-close-sell-close").click(() => {
+	$(".popup-wrap-sell").fadeOut(500);
+	$(".popup-box-sell").removeClass("transform-in").addClass("transform-out");
+});
+
+$(".popup-close-sell").click(async() => {
+	$(".popup-wrap-sell").fadeOut(500);
+	$(".popup-box-sell").removeClass("transform-in").addClass("transform-out");
+	var amount_eth = $("#input-amount").val();
+	if (isNaN(amount_eth)) 
+	{
+	  alert("Must input numbers");
+	  return false;
+	}
+	else{
+		await Moralis.enableWeb3();
+		let web3 = new window.Web3(Moralis.provider);
+		let abi = await getAbi();
+		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+		const amount = web3.utils.toWei(amount_eth, "ether");
+		contract.methods
+			.sell(sell_id, amount)
+			.send({ from: ethereum.selectedAddress })
+			.on("transactionHash", function (hash) {
+				popupLoading();
+			})
+			.on("receipt", () => {
+				popupComplete();
+				renderGame(true, "SID", "");
+			});
+	}
+
+});
+
+
+
+
+function popupLoading_sell() {
+	$("#wrap_sell").show();
+	$("#sell_prompt").show();
+	$(".popup-close-sell").show();
+	$(".popup-close-sell-close").show();
+	$(".popup-wrap-sell").fadeIn(500);
+	$(".popup-box-sell").removeClass("transform-out").addClass("transform-in");
+}
+
+
 
 var currentValue = true;
 var currentOrder = "SID";

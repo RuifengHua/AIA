@@ -1,11 +1,13 @@
 Moralis.initialize("IFFbErUlZh9fWkqDiN7hTC0rFcgYHl3INyKAsdsc"); // Application id from moralis.io
 Moralis.serverURL = "https://vbomok1hrisb.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x9C614f63A8A48C1821C8F51F5546D5781CD5E80E";
+const CONTRACT_ADDRESS = "0x2e64B0919c2891Ce0916e9d42A7bd3a94A897f74";
 async function init() {
 	try {
 		let user = Moralis.User.current();
 		if (!user) {
 			location.href = "index.html";
+		}else{
+			getTotal();
 		}
 	} catch (error) {
 		console.log(error);
@@ -117,12 +119,34 @@ function popupComplete() {
 	$(".popup-box-mint").removeClass("transform-out").addClass("transform-in");
 	$("#wrap").hide();
 	$(".popup-close").show();
+	getTotal();
 }
 
 $(".popup-close").click(() => {
 	$(".popup-wrap").fadeOut(500);
 	$(".popup-box-mint").removeClass("transform-in").addClass("transform-out");
 });
+
+async function getTotal() {
+	$(".container-1").html("");
+	await Moralis.enableWeb3();
+	let web3 = new window.Web3(Moralis.provider);
+	let abi = await getAbi();
+	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+
+	let result = await contract.methods.getTotalnumMint().call({ from: ethereum.selectedAddress });
+	htmlString = `
+	<div class="banner">
+		<div class="headline-4">UNKOWNS WAIT FOR YOU TO DISCOVER: </div>
+	</div>
+	<div class="banner">
+		<div class="headline-3">${500-result}/500</div>
+	</div>
+	`
+	let element = $.parseHTML(htmlString);
+	$(".container-1").append(element);
+}
+
 
 init();
 

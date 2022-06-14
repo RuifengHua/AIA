@@ -1,6 +1,6 @@
 Moralis.initialize("IFFbErUlZh9fWkqDiN7hTC0rFcgYHl3INyKAsdsc"); // Application id from moralis.io
 Moralis.serverURL = "https://vbomok1hrisb.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x9C614f63A8A48C1821C8F51F5546D5781CD5E80E";
+const CONTRACT_ADDRESS = "0x2e64B0919c2891Ce0916e9d42A7bd3a94A897f74";
 
 async function init() {
 	try {
@@ -60,6 +60,48 @@ async function renderGame(sort, keyWord) {
 	$("#game").show();
 }
 
+async function renderGame_all(sort, keyWord) {
+	$(".container ul").html("");
+	await Moralis.enableWeb3();
+	let web3 = new window.Web3(Moralis.provider);
+	let abi = await getAbi();
+	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+	let dataArray = [];
+
+	let listedAIAs = await contract.methods.getTotalnumMint().call({ from: ethereum.selectedAddress });
+	listedAIAs = Array.from(Array(parseInt(listedAIAs)).keys())
+	if (listedAIAs.length != 0) {
+		for (const AIAId of listedAIAs) {
+			let json = await contract.methods.tokenURI(AIAId).call({ from: ethereum.selectedAddress });
+			let data = await $.getJSON(json);
+			if (sort == "SID") {
+				if (keyWord == "" || data.name.includes(keyWord) || AIAId.toString() == keyWord) {
+					renderAIA_all(AIAId, data);
+				}
+			} else {
+				if (keyWord == "" || data.name.includes(keyWord) || AIAId.toString() == keyWord) {
+					data["id"] = AIAId;
+					dataArray.push(data);
+				}
+			}
+		}
+	}
+	if (sort != "SID") {
+		dataArray.sort(sortByRarity());
+		if (sort == "RHL") {
+			for (const data of dataArray.reverse()) {
+				renderAIA_all(data["id"], data);
+			}
+		} else {
+			for (const data of dataArray) {
+				renderAIA_all(data["id"], data);
+			}
+		}
+	}
+	$("#game").show();
+	$("#game").show();
+}
+
 function sortByRarity() {
 	return function (a, b) {
 		if (rarityNum(a.attributes[0]["value"]) > rarityNum(b.attributes[0]["value"])) return 1;
@@ -107,7 +149,7 @@ async function renderAIA(id, data) {
 	let web3 = new window.Web3(Moralis.provider);
 	let abi = await getAbi();
 	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-	let status = await checkStatus(id, contract);
+	let status = await checkStatus_forlisting(id, contract);
 	if (status == "userListing") {
 		htmlString = `
 		<li class="card" id="card_AIA_${id}">
@@ -192,17 +234,148 @@ async function renderAIA(id, data) {
 	});
 }
 
-async function checkStatus(tokenId, contract) {
+
+async function renderAIA_all(id, data) {
+	let htmlString = ``;
+	let card_bottom = rarityName(data.attributes[0]["value"]);
+	let web3 = new window.Web3(Moralis.provider);
+	let abi = await getAbi();
+	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+	let tokenDetail = await contract.methods.getItemDetail(id).call({ from: ethereum.selectedAddress });
+	console.log(tokenDetail)
+	let status = await checkStatus(id, contract, tokenDetail);
+	if (status == "userListing") {
+		htmlString = `
+		<li class="card" id="card_AIA_${id}">
+			<a class="card-image" href="viewNFT.html?id=${id}">
+				<img loading="lazy" src="${data.image}"/>
+			</a>
+			<div class="${card_bottom}">
+			<p class="description">Id:${id}</p>
+			<p class="description">${data.name}</p>
+			<p class="description">${data.attributes[0]["value"]}</p>
+			<div>
+				<div class="link-wrapper">
+					<a id="btn_cancel_sell_${id}" class="animated-link" href="#">
+						<svg width="210" height="40">
+							<rect class="shape" width="210" height="40"></rect>
+						</svg>
+						<div class="text">Cancel</div>
+					</a>
+				</div>
+			</div>
+		<div>
+		</li>`;
+	} else if (status == "otherUserOwn"){
+		htmlString = `
+		<li class="card" id="card_AIA_${id}">
+			<a class="card-image" href="viewNFT.html?id=${id}">
+				<img loading="lazy" src="${data.image}"/>
+			</a>
+			<div class="${card_bottom}">
+			<p class="description">Id:${id}</p>
+			<p class="description">${data.name}</p>
+			<p class="description">${data.attributes[0]["value"]}</p>
+			<div>
+				<div class="link-wrapper">
+					<a id="btn_purchase_${id}" class="animated-link" href="#">
+						<svg width="210" height="40">
+							<rect class="shape" width="210" height="40"></rect>
+						</svg>
+						<div class="text">Purchase</div>
+					</a>
+				</div>
+			</div>
+		<div>
+		</li>`;
+	}else{
+		htmlString = `
+		<li class="card" id="card_AIA_${id}">
+			<a class="card-image" href="viewNFT.html?id=${id}">
+				<img loading="lazy" src="${data.image}"/>
+			</a>
+			<div class="${card_bottom}">
+			<p class="description">Id:${id}</p>
+			<p class="description">${data.name}</p>
+			<p class="description">${data.attributes[0]["value"]}</p>
+			<div>
+			<div class="link-wrapper">
+				<a id="btn_not_purchase_${id}" class="animated-link" href="#">
+					<svg width="210" height="40">
+						<rect class="shape" width="210" height="40"></rect>
+					</svg>
+					<div class="text">Not For Sale</div>
+				</a>
+			</div>
+		</div>
+		<div>
+		</li>`;
+	}
+
+	let element = $.parseHTML(htmlString);
+
+	$(".container ul").append(element);
+
+	$(`#btn_purchase_${id}`).click(async () => {
+		await Moralis.enableWeb3();
+
+		const amount = web3.utils.toWei("0.012", "ether");
+		contract.methods
+			.purchaseItem(id)
+			.send({ from: ethereum.selectedAddress, value: amount })
+			.on("transactionHash", function (hash) {
+				popupLoading();
+			})
+			.on("receipt", () => {
+				popupComplete();
+				renderGame("SID", "");
+			});
+	});
+
+	$(`#btn_cancel_sell_${id}`).click(async () => {
+		await Moralis.enableWeb3();
+		let web3 = new window.Web3(Moralis.provider);
+		let abi = await getAbi();
+		let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+		contract.methods
+			.cancelSell(id)
+			.send({ from: ethereum.selectedAddress })
+			.on("transactionHash", function (hash) {
+				popupLoading();
+			})
+			.on("receipt", () => {
+				popupComplete();
+				renderGame("SID", "");
+			});
+	});
+}
+
+async function checkStatus(tokenId, contract, tokenDetail) {
 	let status = "undefined";
 	let owner = await contract.methods.ownerOf(tokenId).call({ from: ethereum.selectedAddress });
-	let tokenDetail = await contract.methods.getItemDetail(tokenId).call({ from: ethereum.selectedAddress });
-	if (owner == CONTRACT_ADDRESS && tokenDetail.seller.toLowerCase() == Moralis.User.current().get("ethAddress")) {
+	if (owner.toLowerCase() == Moralis.User.current().get("ethAddress")) {
+		status = "userOwn";
+	} else if (owner == CONTRACT_ADDRESS && tokenDetail.seller.toLowerCase() == Moralis.User.current().get("ethAddress")) {
 		status = "userListing";
-	} else {
+	} else if (owner == CONTRACT_ADDRESS) {
 		status = "otherUserOwn";
+	} else {
+		status = "notForSell";
 	}
 	return status;
 }
+
+async function checkStatus_forlisting(tokenId, contract) {
+	let status = "undefined";
+	let owner = await contract.methods.ownerOf(tokenId).call({ from: ethereum.selectedAddress });
+	if (owner.toLowerCase() == Moralis.User.current().get("ethAddress")) {
+		status = "userOwn";
+	}else{
+		status = "otherUserOwn";
+	} 
+	return status;
+}
+
 
 function getAbi() {
 	return new Promise((res) => {
@@ -232,6 +405,15 @@ $(".popup-close").click(() => {
 	$(".popup-wrap").fadeOut(500);
 	$(".popup-box").removeClass("transform-in").addClass("transform-out");
 });
+
+function handleClick(myRadio) {
+	if (myRadio.value == 2) {
+		renderGame_all("SID", "");
+	} else {
+		renderGame("SID", "");
+	}
+	
+}
 
 var currentOrder = "SID";
 

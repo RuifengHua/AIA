@@ -63,7 +63,7 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
     uint256 increment = 0;
     uint256[100] private order;
     uint256 totalSupply;
-    function shuffle() external{
+    function shuffle() external onlyOwner{
         uint256[] memory unshuffled = new uint256[](totalSupply);
         uint8 i;
         for (i=0; i < totalSupply; i++) {
@@ -78,7 +78,7 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
         }
     }
 
-    function getOrder() external view returns (uint256[] memory){
+    function getOrder() external onlyOwner view returns (uint256[] memory){
         uint256[] memory result = new uint256[](totalSupply);
         uint256 i;
         for(i=0; i < totalSupply; i++)
@@ -102,6 +102,10 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
     
     string prefix = "https://ruifenghua-aia-beta.s3.amazonaws.com/metadata/";
     string sub = ".json";
+
+    function getTotalnumMint() public view returns (uint256){
+        return nextId;
+    }
 
     function mint() external payable {
         require(msg.value >= 0.01 ether, "Not enough ETH sent; check price!");
