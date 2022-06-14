@@ -100,7 +100,7 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
 
     uint256 private nextId = 0;
     
-    string prefix = "https://aiarts.storage.googleapis.com/metadata/";
+    string prefix = "https://ruifenghua-aia-beta.s3.amazonaws.com/metadata/";
     string sub = ".json";
 
     function mint() external payable {
