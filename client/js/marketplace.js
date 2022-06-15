@@ -149,7 +149,8 @@ async function renderAIA(id, data) {
 	let web3 = new window.Web3(Moralis.provider);
 	let abi = await getAbi();
 	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-	let status = await checkStatus_forlisting(id, contract);
+	let tokenDetail = await contract.methods.getItemDetail(id).call({ from: ethereum.selectedAddress });
+	let status = await checkStatus(id, contract, tokenDetail);
 	if (status == "userListing") {
 		htmlString = `
 		<li class="card" id="card_AIA_${id}">
