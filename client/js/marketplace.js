@@ -47,6 +47,7 @@ async function renderGame(sort, keyWord) {
 	}
 	if (sort != "SID") {
 		dataArray.sort(sortByRarity());
+		console.log(dataArray)
 		if (sort == "RHL") {
 			for (const data of dataArray.reverse()) {
 				renderAIA(data["id"], data);
@@ -98,7 +99,6 @@ async function renderGame_all(sort, keyWord) {
 			}
 		}
 	}
-	$("#game").show();
 	$("#game").show();
 }
 
@@ -267,7 +267,7 @@ async function renderAIA_all(id, data) {
 			</div>
 		<div>
 		</li>`;
-	} else if (status == "otherUserOwn"){
+	} else if (status == "otherUserOwn") {
 		htmlString = `
 		<li class="card" id="card_AIA_${id}">
 			<a class="card-image" href="viewNFT.html?id=${id}">
@@ -289,7 +289,7 @@ async function renderAIA_all(id, data) {
 			</div>
 		<div>
 		</li>`;
-	}else{
+	} else {
 		htmlString = `
 		<li class="card" id="card_AIA_${id}">
 			<a class="card-image" href="viewNFT.html?id=${id}">
@@ -371,9 +371,9 @@ async function checkStatus_forlisting(tokenId, contract) {
 	let owner = await contract.methods.ownerOf(tokenId).call({ from: ethereum.selectedAddress });
 	if (owner.toLowerCase() == Moralis.User.current().get("ethAddress")) {
 		status = "userOwn";
-	}else{
+	} else {
 		status = "otherUserOwn";
-	} 
+	}
 	return status;
 }
 
@@ -413,22 +413,46 @@ function handleClick(myRadio) {
 	} else {
 		renderGame("SID", "");
 	}
-	
+	if (myRadio.value == 1) {
+		currentValue = true;
+	} else {
+		currentValue = false;
+	}
 }
 
 var currentOrder = "SID";
+var currentValue = true;
 
 $(".RHL").click(() => {
-	renderGame("RHL", "");
-	currentOrder = "RHL";
+	if (currentValue) {
+		renderGame("RHL", "");
+		currentOrder = "RHL";
+	}
+	else {
+		renderGame_all("RHL", "");
+		currentOrder = "RHL";
+	}
 });
 $(".RLH").click(() => {
-	renderGame("RLH", "");
-	currentOrder = "RLH";
+	if (currentValue) {
+		renderGame("RLH", "");
+		currentOrder = "RLH";
+	}
+	else {
+		renderGame_all("RLH", "");
+		currentOrder = "RLH";
+	}
 });
 $(".SID").click(() => {
-	renderGame("SID", "");
-	currentOrder = "SID";
+	if (currentValue) {
+		renderGame("SID", "");
+		currentOrder = "SID";
+	}
+	else {
+		renderGame_all("SID", "");
+		currentOrder = "SID";
+	}
+
 });
 
 $("#searchKeyword").keyup(function (e) {
@@ -479,7 +503,7 @@ scene.add(group);
 mesh = new THREE.Mesh(
 	new THREE.TubeGeometry(
 		new (THREE.Curve.create(
-			function () {},
+			function () { },
 			function (percent) {
 				var x = length * Math.sin(pi2 * percent),
 					y = radius * Math.cos(pi2 * 3 * percent),
