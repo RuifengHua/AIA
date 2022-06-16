@@ -1,6 +1,6 @@
 Moralis.initialize("IFFbErUlZh9fWkqDiN7hTC0rFcgYHl3INyKAsdsc"); // Application id from moralis.io
 Moralis.serverURL = "https://vbomok1hrisb.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x2e64B0919c2891Ce0916e9d42A7bd3a94A897f74";
+const CONTRACT_ADDRESS = "0x4ffd81d77032Ae1896A0310672eE87fAA61fFAb0";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -113,6 +113,26 @@ async function getShuffle() {
 	let result = await contract.methods.getOrder().call({ from: ethereum.selectedAddress });
 	console.log(result);
 }
+
+async function owner_mint() {
+	await Moralis.enableWeb3();
+	let web3 = new window.Web3(Moralis.provider);
+	let abi = await getAbi();
+	let contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS);
+
+	contract.methods
+		.owner_mint()
+		.send({ from: ethereum.selectedAddress })
+		.on("transactionHash", function (hash) {
+			popupLoading();
+		})
+		.on("receipt", () => {
+			popupComplete();
+			console.log("owner_minted!!");
+		});
+}
+
+
 
 document.getElementById("btn-start").onclick = userStart;
 document.getElementById("btn-login").onclick = login;

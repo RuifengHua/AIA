@@ -61,13 +61,24 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
     }
 
     uint256 increment = 0;
-    uint256[100] private order;
+    uint256[190] private order;
     uint256 totalSupply;
     function shuffle() external onlyOwner{
         uint256[] memory unshuffled = new uint256[](totalSupply);
         uint8 i;
+        uint8 j = 1;
         for (i=0; i < totalSupply; i++) {
-            unshuffled[i] = i+1;
+            if (j == 15 || j == 185 || j == 165 || j == 127 || j == 37 || j == 133 || j == 25 || j == 109 || j == 48 || j == 57)
+            {
+                unshuffled[i] = j+1;
+                j = j + 1;
+            }
+            else
+            {
+                unshuffled[i] = j;
+            }
+            j = j + 1;
+            
         }
         uint idx;
         for (i=0; i < totalSupply; i++) {
@@ -98,7 +109,7 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
     event PurchaseAnItem(address indexed buyer, uint256 indexed tokenId, address indexed seller, uint256 price, uint256 timestamp);
     /////////////////////////////////////////////Token Contract///////////////////////////////////////////////////
 
-    uint256 private nextId = 0;
+    uint256 private nextId = 10;
     
     string prefix = "https://ruifenghua-aia-beta.s3.amazonaws.com/metadata/";
     string sub = ".json";
@@ -113,6 +124,30 @@ contract Token is Ownable, IERC721Receiver, ReentrancyGuard, VRFConsumerBaseV2, 
         _setTokenURI(nextId,  string(abi.encodePacked(prefix, uintToString(order[nextId]), sub)));
         emit Mint(msg.sender, nextId, block.timestamp);
         nextId++;
+    }
+
+    function owner_mint() external payable onlyOwner {
+        _safeMint(msg.sender, 0);
+        _setTokenURI(0,  string(abi.encodePacked(prefix, uintToString(15), sub)));
+        _safeMint(msg.sender, 1);
+        _setTokenURI(1,  string(abi.encodePacked(prefix, uintToString(185), sub)));
+        _safeMint(msg.sender, 2);
+        _setTokenURI(2,  string(abi.encodePacked(prefix, uintToString(165), sub)));
+        _safeMint(msg.sender, 3);
+        _setTokenURI(3,  string(abi.encodePacked(prefix, uintToString(127), sub)));
+        _safeMint(msg.sender, 4);
+        _setTokenURI(4,  string(abi.encodePacked(prefix, uintToString(37), sub)));
+        _safeMint(msg.sender, 5);
+        _setTokenURI(5,  string(abi.encodePacked(prefix, uintToString(133), sub)));
+        _safeMint(msg.sender, 6);
+        _setTokenURI(6,  string(abi.encodePacked(prefix, uintToString(25), sub)));
+        _safeMint(msg.sender, 7);
+        _setTokenURI(7,  string(abi.encodePacked(prefix, uintToString(109), sub)));
+        _safeMint(msg.sender, 8);
+        _setTokenURI(8,  string(abi.encodePacked(prefix, uintToString(48), sub)));
+        _safeMint(msg.sender, 9);
+        _setTokenURI(9,  string(abi.encodePacked(prefix, uintToString(57), sub)));
+
     }
 
 

@@ -1,6 +1,6 @@
 Moralis.initialize("IFFbErUlZh9fWkqDiN7hTC0rFcgYHl3INyKAsdsc"); // Application id from moralis.io
 Moralis.serverURL = "https://vbomok1hrisb.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x2e64B0919c2891Ce0916e9d42A7bd3a94A897f74";
+const CONTRACT_ADDRESS = "0x4ffd81d77032Ae1896A0310672eE87fAA61fFAb0";
 async function init() {
 	try {
 		let user = Moralis.User.current();
@@ -140,7 +140,7 @@ async function getTotal() {
 		<div class="headline-4">UNKOWNS WAIT FOR YOU TO DISCOVER: </div>
 	</div>
 	<div class="banner">
-		<div class="headline-3">${500-result}/500</div>
+		<div class="headline-3">${200-result}/200</div>
 	</div>
 	`
 	let element = $.parseHTML(htmlString);
