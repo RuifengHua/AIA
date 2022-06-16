@@ -1,6 +1,6 @@
 Moralis.initialize("IFFbErUlZh9fWkqDiN7hTC0rFcgYHl3INyKAsdsc"); // Application id from moralis.io
 Moralis.serverURL = "https://vbomok1hrisb.usemoralis.com:2053/server"; //Server url from moralis.io
-const CONTRACT_ADDRESS = "0x4ffd81d77032Ae1896A0310672eE87fAA61fFAb0";
+const CONTRACT_ADDRESS = "0xA104762E49C95B2cff7da504a25DCB63d8935FeD";
 var sell_id = 0;
 async function init() {
 	try {
